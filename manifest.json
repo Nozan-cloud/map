@@ -1,5 +1,5 @@
 {
-    "name" : "哒宰的圈子",
+    "name" : "紫荆旅图",
     "appid" : "__UNI__5FBA77E",
     "description" : "",
     "versionName" : "1.0.0",
@@ -50,11 +50,25 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "",
+        "appid" : "wxb7c3b007af329989",
         "setting" : {
-            "urlCheck" : false
+            "urlCheck" : false,
+            "es6" : true,
+            "postcss" : true,
+            "minified" : true
         },
-        "usingComponents" : true
+        "usingComponents" : true,
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "你的位置信息将用于小程序位置接口的效果展示"
+            }
+        },
+        "secureNetwork" : {
+            "enable" : true
+        },
+        "unipush" : {
+            "enable" : false
+        }
     },
     "mp-alipay" : {
         "usingComponents" : true
@@ -68,5 +82,14 @@
     "uniStatistics" : {
         "enable" : false
     },
-    "vueVersion" : "2"
+    "vueVersion" : "2",
+    "h5" : {
+        "sdkConfigs" : {
+            "maps" : {
+                "qqmap" : {
+                    "key" : "4H5BZ-O2T3V-RJTPV-5UL7G-WZ6B7-3OFYG"
+                }
+            }
+        }
+    }
 }
