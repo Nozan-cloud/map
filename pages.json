@@ -201,6 +201,20 @@
 				"navigationBarTitleText" : "home",
 				"enablePullDownRefresh" : false
 			}
+		},
+		{
+			"path" : "pages/photodetail/photodetail",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/dictionar/dictionar",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
 		}
 		
 	],
