@@ -111,11 +111,12 @@
 								cloudPath: item.name,
 
 							}).then(res => {
-								console.log("https://env-00jxhjkqc13p.normal.cloudstatic.cn"+String(res.fileID).slice(24))  
-								console.log(res.fileID)
+								// console.log("https://env-00jxhjkqc13p.normal.cloudstatic.cn"+String(res.fileID).slice(24))  
+								
+								// console.log(res.fileID)
 								this.editorCtx.insertImage({
 									
-									src: "https://env-00jxhjkqc13p.normal.cloudstatic.cn"+String(res.fileID).slice(24),//真不容易啊这个地方  
+									src: res.fileID//真不容易啊这个地方  
 									
 								})
 								 

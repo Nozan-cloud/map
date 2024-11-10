@@ -1,8 +1,9 @@
 <template>
-	<view class="map-container">
-		<map style="width: 100%; height: 750rpx;" :latitude="latitude" :longitude="longitude" :markers="covers">
+	
+	
+		<map style="width: 100%; height: 750vh;" :latitude="latitude" :longitude="longitude" :markers="covers">
 		</map>
-	</view>
+
 </template>
 
 <script>
@@ -28,10 +29,7 @@
 </script>
 
 <style lang="scss">
-.container-map{
-	width: 100%;
-	height: 100%;
-	
-}
+
+
 
 </style>
