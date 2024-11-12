@@ -206,32 +206,39 @@
 			"path" : "pages/photodetail/photodetail",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "详细信息"
 			}
 		},
 		{
 			"path" : "pages/dictionar/dictionar",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "动植图鉴"
 			}
 		},
 		{
 			"path" : "pages/travellog/travellog",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "游览攻略"
 			}
 		},
 		{
 			"path" : "pages/travellogdetail/travellogdetail",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "游览攻略"
 			}
 		},
 		{
 			"path" : "pages/addtravellog/addtravellog",
+			"style" : 
+			{
+				"navigationBarTitleText" : "新增攻略"
+			}
+		},
+		{
+			"path" : "pages/uploadpic/uploadpic",
 			"style" : 
 			{
 				"navigationBarTitleText" : ""

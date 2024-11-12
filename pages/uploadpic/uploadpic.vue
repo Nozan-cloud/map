@@ -6,8 +6,7 @@
     
     <button class="upload-button" @click="chooseImage">选择图片</button>  
 
-    <input v-model="title" placeholder="标题" />  
-    <input v-model="summary" placeholder="简介" />  
+    <input v-model="title" placeholder="名称" />  
     <textarea v-model="content" placeholder="文章内容" />  
     
     <button class="add-button" @click="addItem">添加</button>  
@@ -22,7 +21,6 @@ export default {
     return {  
       image: '',  
       title: '',  
-      summary: '',  
       content: '',  
       errorMessage: '' // 用于存储错误信息  
     };  
@@ -74,7 +72,7 @@ export default {
     },  
     uploadImage(filePath) {  
       uniCloud.uploadFile({  
-        cloudPath: `Lvto/攻略游记/${this.image}.png`, // 文件保存路径  
+        cloudPath: `Lvto/图鉴/${this.image}.png`, // 文件保存路径  
         filePath: filePath,  
         success: (uploadResult) => {  
           this.image = uploadResult.fileID; // 获取文件ID（即文件路径）  
@@ -105,7 +103,7 @@ export default {
       uni.setStorageSync('items', items);  
 
       uni.navigateTo({  
-        url: '/pages/travellog/travellog'  
+        url: '/pages/dictionar/dictionar'  
       });  
     }  
   }  
