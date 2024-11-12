@@ -30,7 +30,7 @@
 			</view>
 		</view>
 		<view class="goAdd" @click="goAdd()">
-			<uni-icons type="plusempty" size="30" color="white"></uni-icons>
+			<uni-icons type= "plusempty" size="30" color="white"></uni-icons>
 		
 		</view>
 	</view>
