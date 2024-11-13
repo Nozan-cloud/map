@@ -44,8 +44,9 @@
 </template>
 
 <script type="text/javascript" src="https://mapapi.qq.com/web/mapComponents/geoLocation/v/geolocation.min.js"></script>
-<script type="text/javascript"
-	src="https://map.qq.com/api/gljs?v=1.exp&libraries=service&key=4H5BZ-O2T3V-RJTPV-5UL7G-WZ6B7-3OFYG"></script>
+ <script type="text/javascript"
+ 	src="https://map.qq.com/api/gljs?v=1.exp&libraries=service&key=4H5BZ-O2T3V-RJTPV-5UL7G-WZ6B7-3OFYG"></script>
+
 
 <script>
 	const db = uniCloud.database() //获取数据库实例
@@ -60,7 +61,7 @@
 				searchPanelVisible: false,
 				geolocation: null,
 				isLocating: false,
-				// markers: [], // 存储标记点的数组
+				// 存储标记点的对象
 				markerObj: {
 					location: {
 						latitude: 0,
@@ -73,19 +74,22 @@
 					icon: "",
 					rotate: 0,
 					level: 0,
-				
+
 				},
+				marker: {
+
+				}
 			};
 		},
 		mounted() {
 			this.loadTencentMapAPI().then(() => {
-				this.geolocation = new qq.maps.Geolocation(
-					"4H5BZ-O2T3V-RJTPV-5UL7G-WZ6B7-3OFYG",
-					"LvtuKey"
-				);
-				this.initMap(); // 初始化地图
-				this.getCurrentLocation(); // 获取当前位置
-			});
+			 				this.geolocation = new qq.maps.Geolocation(
+			 					"4H5BZ-O2T3V-RJTPV-5UL7G-WZ6B7-3OFYG",
+			 					"LvtuKey"
+			 				);
+			 				this.initMap(); // 初始化地图
+			 				this.getCurrentLocation(); // 获取当前位置
+			 			});
 		},
 		methods: {
 			//点击新增标记点
@@ -100,33 +104,46 @@
 
 					});
 				} else {
+					uni.reLaunch({
+						url: "/pages/map/map"
+					})
 					console.log("退出编辑模式");
 				}
 			},
 			checkMarker() {
+				// uni.showLoading({
+				// 	title: "添加中"
+				// })
 				// 上传标记点数据到云端
 				this.addData();
-				// this.uploadMarkersToCloud();
 			},
-			// 上传标记点数据到云端
-			uploadMarkersToCloud() {
-				// 将 markers 数组转换为 JSON 字符串
-				const markersData = JSON.stringify(this.markers);
+			// 假设 res 是从云数据库查询到的包含多个标记点的对象
+			fetchMarkers() {
+				const db = uniCloud.database();
+				db.collection('map-data').get().then(res => {
+					// 确保 res.result.data 是一个数组
 
-				// 调用云函数上传数据
-				wx.cloud.callFunction({
-					name: 'uploadMarkers', // 云函数名称
-					data: {
-						markers: markersData,
-					},
-					success: function(res) {
-						console.log('上传成功:', res);
-						// 处理上传成功的逻辑
-					},
-					fail: function(err) {
-						console.error('上传失败:', err);
-						// 处理上传失败的逻辑
+					console.log(res.result.data)
+					if (Array.isArray(res.result.data) && res.result.data.length > 0) {
+						// 创建一个 geometries 数组来存储所有标记点的数据
+						const geometries = res.result.data.map(item => {
+							return {
+								position: new TMap.LatLng(item.location.coordinates[1], item.location
+									.coordinates[0]), // 纬度在前，经度在后
+								title: item.title, // 标记点的标题
+							};
+						});
+
+						// 使用 TMap.MultiMarker 创建多个标记点
+						new TMap.MultiMarker({
+							map: this.map,
+							geometries: geometries,
+						});
+					} else {
+						console.error('没有查询到标记点数据', res);
 					}
+				}).catch(err => {
+					console.error('查询标记点数据失败', err);
 				});
 			},
 			// 添加标记点
@@ -138,63 +155,70 @@
 				this.markerObj.location.longitude = lng;
 				this.markerObj.title = "新标记点";
 				console.log(this.markerObj)
+				// 使用 TMap.MultiMarker 创建多个标记点
 				new TMap.MultiMarker({
 					map: this.map,
-					styles: { // 定义标记点的样式
-						smarker: new TMap.MarkerStyle({
-							width: 20,
-							height: 30,
-							anchor: {
-								x: 10,
-								y: 30
-							},
+					geometries: geometries,
+					// 可以在这里设置统一的样式
+					style: {
+						icon: new TMap.Icon({
+							size: new TMap.Size(20, 30), // 图标的大小
+							image: 'path/to/your/icon.png', // 图标的URL
 						}),
 					},
-					geometries: [{ // 定义要添加的标记点
-						styleId: "smarker",
-						position: new TMap.LatLng(lat, lng),
-						// properties: {
-						// 	title: "Current Location",
-						// },
-					}, ],
+					events: {
+						click: (e) => {
+							// 点击事件处理
+							const markerId = e.target.id;
+							const markerData = res.data.find(m => m._id === markerId);
+							if (markerData) {
+								this.showInfoWindow(markerData);
+							}
+						}
+					}
 				});
 
 				// 将标记点的经纬度添加到 markers 数组
 				// this.markers.push({ lat, lng });
 			},
+			// 显示信息窗口
+			showInfoWindow(markerData) {
+				const infoWindow = new TMap.InfoWindow({
+					content: `<div><h3>${markerData.title}</h3><p>点击这里查看详细信息</p></div>`,
+					pixelOffset: new TMap.Size(0, -28) // 偏移量，使得信息窗口不覆盖标记点
+				});
+				infoWindow.open(this.map, this.map.getMarkerById(markerData._id));
+			},
 			// 上传数据到数据库
 			addData() {
-			  const db = uniCloud.database();
-			  const location = {
-			    type: 'Point',
-			    coordinates: [this.markerObj.location.longitude, this.markerObj.location.latitude]
-			  };
-			  
-			  const dataToInsert = {
-			    ...this.markerObj,
-			    location: location
-			  };
-			  
-			  db.collection("map-data").add(dataToInsert)
-			    .then(res => {
-			      console.log(dataToInsert);
-			      uni.hideLoading();
-			      uni.showToast({
-			        title: "添加成功"
-			      });
-			      setTimeout(() => {
-			        uni.reLaunch({
-			          url: "/pages/map/map"
-			        });
-			      }, 800);
-			    })
-			    .catch(err => {
-			      console.error('添加标记点失败', err);
-			      uni.showToast({
-			        title: "添加失败",
-			        icon: "none"
-			      });
-			    });
+				const location = {
+					type: 'Point',
+					coordinates: [this.markerObj.location.longitude, this.markerObj.location.latitude]
+				};
+				const dataToInsert = {
+					...this.markerObj,
+					location: location
+				};
+				db.collection("map-data").add(dataToInsert)
+					.then(res => {
+						// console.log(dataToInsert);
+
+						uni.hideLoading();
+						// 显示添加成功的提示
+						uni.showToast({
+							title: "添加成功",
+							icon: "success",
+							duration: 2000
+						});
+
+					})
+					.catch(err => {
+						console.error('添加标记点失败', err);
+						uni.showToast({
+							title: "添加失败",
+							icon: "none"
+						});
+					});
 			},
 			navclick(index) {
 				this.navindex = index;
@@ -224,27 +248,20 @@
 				// 更新地图中心和添加当前位置标记
 				if (this.map) {
 					this.map.setCenter(new TMap.LatLng(this.latitude, this.longitude));
+					// 查询标记点数据
+					db.collection('map-data').get().then(res => {
+						console.log(res);
+
+					});
+
 					new TMap.MultiMarker({
 						map: this.map,
-						styles: { // 定义标记点的样式
-							marker1: new TMap.MarkerStyle({
-								width: 20,
-								height: 30,
-								anchor: {
-									x: 10,
-									y: 30
-								},
-							}),
-						},
 						geometries: [{ // 定义要添加的标记点
-							id: "currentLocation",
-							styleId: "marker1",
 							position: new TMap.LatLng(this.latitude, this.longitude),
-							properties: {
-								title: "Current Location",
-							},
+							// title: "Current Location",
 						}, ],
 					});
+					this.fetchMarkers();
 				}
 			},
 			errorPosition(e) {
@@ -255,8 +272,8 @@
 				return new Promise((resolve, reject) => {
 					let loadedCount = 0;
 					const apis = [
-						"https://mapapi.qq.com/web/mapComponents/geoLocation/v/geolocation.min.js",
-						"https://map.qq.com/api/gljs?v=1.exp&libraries=service&key=4H5BZ-O2T3V-RJTPV-5UL7G-WZ6B7-3OFYG",
+						"https://mapapi.qq.com/web/mapComponents/geoLocation/v/geolocation.min.js",  
+						"https://map.qq.com/api/gljs?v=1.exp&libraries=service&key=4H5BZ-O2T3V-RJTPV-5UL7G-WZ6B7-3OFYG",  
 					];
 					apis.forEach((src) => {
 						const script = document.createElement("script");
@@ -279,7 +296,6 @@
 			initMap() {
 				// 防止重复绘制地图
 				if (this.map) return;
-
 				this.startPosition = new TMap.LatLng(this.latitude, this.longitude);
 				const mapOptions = {
 					rotation: 20,
