@@ -63,7 +63,6 @@
 			// 从数据库拿数据
 			const { result: { data } } = await uniCloud.database().collection('scenicSpot').get()
 			this.scenicData = data
-			console.log(data)
 		}
 	}
 </script>
