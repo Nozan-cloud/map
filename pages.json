@@ -1,7 +1,7 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/uni-map/uni-map",
+			"path": "pages/uni-cloud-map/uni-cloud-map",
 			"style": {
 				"navigationBarTitleText": ""
 			}
@@ -204,13 +204,6 @@
 			"style": {
 				"navigationBarTitleText": "home",
 				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path" : "pages/uni-cloud-map/uni-cloud-map",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
 			}
 		}
 

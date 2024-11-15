@@ -1,0 +1,1 @@
+{"bsonType":"object","required":[],"permission":{"read":true,"create":false,"update":false,"delete":false},"properties":{"_id":{"description":"ID，系统自动生成"},"id":{"bsonType":"string","description":"美食的id开头是11，总体是11+各自编号，与详细信息中的detai对应，111蛋包饭，112华农酸奶，113笼仔饭，114小锅菜，115营养餐，116自选菜"}}}

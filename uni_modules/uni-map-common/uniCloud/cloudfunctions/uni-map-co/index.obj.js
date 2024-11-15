@@ -69,6 +69,8 @@ module.exports = {
 		console.log("result", res.result);
 		return res;
 	},
+	
+	
 	// 函数chooseLocation是给uni.chooseLocation使用，请勿修改chooseLocation函数的代码
 	async chooseLocation(parame = {}) {
 		let res = {};
@@ -178,56 +180,6 @@ module.exports = {
 		return res;
 	},
 
-	// 演示用 - 初始化静态001场景演示数据
-	async initStatic001(data = {}) {
-		let res = { errCode: 0 };
-		const category = "static-001";
-		// 先删除
-		await opendbPoiDB.where({
-			category: category
-		}).remove();
-		// 后添加随机数据
-
-		// 以天安门为中心
-		let tiananmen = {
-			longitude: 116.39747,
-			latitude: 39.908823,
-		};
-		let time = Date.now();
-
-		// 随机生成6个门店地址
-		let list = [];
-		for (let i = 1; i <= 6; i++) {
-			let randomCoordinate = getRandomCoordinateWithinRadius(tiananmen.longitude, tiananmen.latitude, 10); // 随机生成在天安门方圆X KM内的坐标
-			list.push({
-				category: category, // 场景值，用于区分这些POI所属哪张地图
-				type: "门店",
-				title: `随机门店-${i}`,
-				location: new db.Geo.Point(randomCoordinate.longitude, randomCoordinate.latitude),
-				create_date: time,
-				visible: true,
-				is_random: true, // 表示此为随机生成的点，方便删除
-				level: i
-			});
-		}
-		// 随机生成1个总部地址
-		let randomCoordinate = getRandomCoordinateWithinRadius(tiananmen.longitude, tiananmen.latitude, 1); // 随机生成在天安门方圆X KM内的坐标
-		list.push({
-			category: category, // 场景值，用于区分这些POI所属哪张地图
-			type: "总部",
-			title: `随机总部`,
-			location: new db.Geo.Point(randomCoordinate.longitude, randomCoordinate.latitude),
-			create_date: time,
-			visible: true,
-			is_random: true, // 表示此为随机生成的点，方便删除
-			level: 7
-		});
-
-		// 添加到数据库
-		await opendbPoiDB.add(list);
-
-		return res;
-	},
 
 	// 演示用 - 初始化动态001场景演示数据（模拟送外卖场景）
 	async initDynamics001(data = {}) {

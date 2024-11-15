@@ -2,15 +2,6 @@
 
 
 const validator = {
-  "visible": {
-    "rules": [
-      {
-        "format": "bool"
-      }
-    ],
-    "title": "是否显示",
-    "label": "是否显示"
-  },
   "category": {
     "rules": [
       {
@@ -29,33 +20,6 @@ const validator = {
     "title": "类型",
     "label": "类型"
   },
-  "icon": {
-    "rules": [
-      {
-        "format": "string"
-      }
-    ],
-    "title": "图标",
-    "label": "图标"
-  },
-  "rotate": {
-    "rules": [
-      {
-        "format": "number"
-      }
-    ],
-    "title": "图标角度",
-    "label": "图标角度"
-  },
-  "level": {
-    "rules": [
-      {
-        "format": "number"
-      }
-    ],
-    "title": "图标显示的层级",
-    "label": "图标显示的层级"
-  },
   "title": {
     "rules": [
       {
@@ -68,42 +32,6 @@ const validator = {
     "title": "名称",
     "label": "名称"
   },
-  "address": {
-    "rules": [
-      {
-        "format": "string"
-      }
-    ],
-    "title": "地址",
-    "label": "地址"
-  },
-  "tel": {
-    "rules": [
-      {
-        "format": "string"
-      }
-    ],
-    "title": "电话",
-    "label": "电话"
-  },
-  "province": {
-    "rules": [
-      {
-        "format": "string"
-      }
-    ],
-    "title": "省",
-    "label": "省"
-  },
-  "city": {
-    "rules": [
-      {
-        "format": "string"
-      }
-    ],
-    "title": "市",
-    "label": "市"
-  },
   "district": {
     "rules": [
       {
@@ -112,18 +40,6 @@ const validator = {
     ],
     "title": "区/县",
     "label": "区/县"
-  },
-  "location": {
-    "rules": [
-      {
-        "required": true
-      },
-      {
-        "format": "object"
-      }
-    ],
-    "title": "地理位置",
-    "label": "地理位置"
   }
 }
 
