@@ -205,6 +205,20 @@
 				"navigationBarTitleText": "home",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			"path" : "pages/foods/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/detailPages/detailPages",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
 		}
 
 	],
