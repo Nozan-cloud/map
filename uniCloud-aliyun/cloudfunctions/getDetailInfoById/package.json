@@ -1,0 +1,7 @@
+{
+  "name": "getDetailInfoById",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}
