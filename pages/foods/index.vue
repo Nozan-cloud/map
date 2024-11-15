@@ -3,7 +3,7 @@
 		<view class="title">
 			特色美食
 		</view>
-		<view v-for="item in foodsData" :key="item.id" @click="redirectTo(item.id)">
+		<view v-for="item in foodsData" :key="item._id" @click="redirectTo(item._id)">
 			<foodItem :data="item"></foodItem>
 		</view>
 		<view class="spaceBox"></view>
@@ -64,6 +64,7 @@ import foodItem from '../../components/foodItem/foodItem.vue';
 		async mounted() {
 			const { result: { data } } = await uniCloud.database().collection('foods').get()
 			this.foodsData = data
+			// console.log(this.foodsData)
 		}
 	}
 </script>

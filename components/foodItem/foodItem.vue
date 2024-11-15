@@ -1,6 +1,6 @@
 <template>
 	<view class="Box">
-		<view class="foodsBox" :style="{ backgroundImage: `url(${data.backgroundImg})` }">
+		<view class="foodsBox" :style="{ backgroundImage: `url(${data.pictures[0]})` }">
 			<!-- 蒙层 -->
 			<view class="cover">
 				<!-- 标题 -->
@@ -20,6 +20,7 @@
 				
 			};
 		},
+		
 		props: {
 			data: Object
 		}

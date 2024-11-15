@@ -8,8 +8,8 @@
 		<view class="box">
 			<view>
 				<swiper class="swiperBox" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
-					<swiper-item v-for="item in scenicData" :key="item.id">
-						<view class="itemBox" @click="redirectTo(item.id)">
+					<swiper-item v-for="item in scenicData" :key="item._id">
+						<view class="itemBox" @click="redirectTo(item._id)">
 							<scenicSpotItem :data="item"></scenicSpotItem>
 						</view>
 					</swiper-item>
@@ -62,6 +62,7 @@
 		async mounted() {
 			// 从数据库拿数据
 			const { result: { data } } = await uniCloud.database().collection('scenicSpot').get()
+			// console.log(data)
 			this.scenicData = data
 		}
 	}
