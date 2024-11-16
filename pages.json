@@ -1,6 +1,5 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		
 		{
 			"path": "pages/index/index",
 			"style": {
@@ -8,13 +7,13 @@
 			}
 		},
 		{
-			"path": "pages/map/map",
-			"style": {
-				"navigationBarTitleText": "路线打卡",
-				"enablePullDownRefresh": false
+			"path" : "pages/map/map",
+			"style" : 
+			{
+				"navigationBarTitleText" : "路线打卡",
+				"enablePullDownRefresh" : false
 			}
 		},
-
 		{
 			"path": "pages/quanzi/quanzi",
 			"style": {
@@ -188,40 +187,64 @@
 			}
 		},
 		{
-			"path": "pages/test/test",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+			"path" : "pages/test/test",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
 			}
 		},
 		{
-			"path": "pages/home/home",
-			"style": {
-				"navigationBarTitleText": "home",
-				"enablePullDownRefresh": false
+			"path" : "pages/home/home",
+			"style" : 
+			{
+				"navigationBarTitleText" : "home",
+				"enablePullDownRefresh" : false
 			}
 		},
 		{
-			"path" : "pages/foods/index",
+			"path" : "pages/photodetail/photodetail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "详细信息"
+			}
+		},
+		{
+			"path" : "pages/dictionar/dictionar",
+			"style" : 
+			{
+				"navigationBarTitleText" : "动植图鉴"
+			}
+		},
+		{
+			"path" : "pages/travellog/travellog",
+			"style" : 
+			{
+				"navigationBarTitleText" : "游览攻略"
+			}
+		},
+		{
+			"path" : "pages/travellogdetail/travellogdetail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "游览攻略"
+			}
+		},
+		{
+			"path" : "pages/addtravellog/addtravellog",
+			"style" : 
+			{
+				"navigationBarTitleText" : "新增攻略"
+			}
+		},
+		{
+			"path" : "pages/uploadpic/uploadpic",
 			"style" : 
 			{
 				"navigationBarTitleText" : ""
-			}
-		},
-		{
-			"path" : "pages/detailPages/detailPages",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
-			}
-		},
-		{
-			"path": "pages/uni-cloud-map/uni-cloud-map",
-			"style": {
-				"navigationBarTitleText": ""
 			}
 		}
-
+		
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
@@ -232,7 +255,8 @@
 	"tabBar": {
 		"color": "#666",
 		"selectedColor": "#13742F",
-		"list": [{
+		"list": [
+			{
 				"pagePath": "pages/index/index",
 				"iconPath": "static/image/圈子.png",
 				"selectedIconPath": "static/image/圈子 (1).png",
@@ -262,7 +286,7 @@
 		"resToLogin": true // 自动解析云对象及clientDB的错误码，如果是客户端token不正确或token过期则自动跳转配置的登录页面，配置为false则关闭此行为，默认true
 	},
 	"usingComponents": {
-		"map": "/uni_modules/@dcloudio/uni-map/components/uni-map/uni-map"
-	}
+	    "map": "/uni_modules/@dcloudio/uni-map/components/uni-map/uni-map"
+	  }
 
 }
