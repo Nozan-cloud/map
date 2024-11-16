@@ -4,7 +4,7 @@
 		<view class="title">
 			必玩景区
 		</view>
-		<!-- 轮播图 缺动态渲染与逻辑 -->
+		<!-- 轮播图 -->
 		<view class="box">
 			<view>
 				<swiper class="swiperBox" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">

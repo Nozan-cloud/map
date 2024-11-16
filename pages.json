@@ -216,6 +216,20 @@
 			{
 				"navigationBarTitleText" : ""
 			}
+		},
+		{
+			"path" : "pages/Product/Product",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/homeBanner/homeBanner",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
 		}
 		
 	],
