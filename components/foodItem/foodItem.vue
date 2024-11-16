@@ -1,6 +1,6 @@
 <template>
 	<view class="Box">
-		<view class="foodsBox" :style="{ backgroundImage: `url(${data.pictures[0]})` }">
+		<view class="foodsBox" :style="{ backgroundImage: `url(${data.pictures[0].fileID})` }">
 			<!-- 蒙层 -->
 			<view class="cover">
 				<!-- 标题 -->

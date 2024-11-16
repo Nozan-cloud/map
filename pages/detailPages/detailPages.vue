@@ -4,7 +4,7 @@
 		<swiper class="swiperBox" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
 				<swiper-item v-for="item in detailData.pictures" :key="item">
 					<view class="swiper-item">
-						<img :src="item" alt="" />
+						<img :src="item.fileID" alt="" />
 					</view>
 				</swiper-item>
 		</swiper>

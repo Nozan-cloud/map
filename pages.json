@@ -7,14 +7,6 @@
 			}
 		},
 		{
-			"path" : "pages/map/map",
-			"style" : 
-			{
-				"navigationBarTitleText" : "路线打卡",
-				"enablePullDownRefresh" : false
-			}
-		},
-		{
 			"path": "pages/quanzi/quanzi",
 			"style": {
 				"navigationBarTitleText": "紫荆秘境"
@@ -243,7 +235,27 @@
 			{
 				"navigationBarTitleText" : ""
 			}
-		}
+		},
+		{
+			"path" : "pages/foods/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/detailPages/detailPages",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+					"path": "pages/uni-cloud-map/uni-cloud-map",
+					"style": {
+						"navigationBarTitleText": ""
+					}
+				}
 		
 	],
 	"globalStyle": {

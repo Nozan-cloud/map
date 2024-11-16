@@ -1,7 +1,7 @@
 <template>
 	<!-- 必玩景区小组件 -->
 	<view>
-		<view class="box" :style="{ backgroundImage: `url(${data.pictures[0]})` }">
+		<view class="box" :style="{ backgroundImage: `url(${data.pictures[0].fileID})` }">
 			<view class="summary" >
 				<p class="title">{{data.title }}</p>
 				<view class="labelBox">
