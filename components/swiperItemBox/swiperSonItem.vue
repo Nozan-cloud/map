@@ -1,6 +1,6 @@
 <template>
 	<view class="Box">
-		<view class="foodsBox" :style="{ backgroundImage: `url(${data.pictures[0].fileID})` }">
+		<view class="swiperBox" :style="{ backgroundImage: `url(${data.backgroundImg})` }">
 			<!-- 蒙层 -->
 			<view class="cover">
 				<!-- 标题 -->
@@ -14,13 +14,12 @@
 
 <script>
 	export default {
-		name:"foodItem",
+		name:"swiperSonItem",
 		data() {
 			return {
 				
 			};
 		},
-		
 		props: {
 			data: Object
 		}
@@ -32,7 +31,7 @@
 		width: 342px;
 		margin: auto;
 	}
-	.foodsBox {
+	.swiperBox {
 		width: 100px;
 		height: 100px;
 		margin-right: 14px;
