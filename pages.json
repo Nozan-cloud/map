@@ -255,6 +255,20 @@
 					"style": {
 						"navigationBarTitleText": ""
 					}
+				},
+				{
+					"path" : "pages/allSpots/allSpots",
+					"style" : 
+					{
+						"navigationBarTitleText" : ""
+					}
+				},
+				{
+					"path" : "pages/allFoods/allFoods",
+					"style" : 
+					{
+						"navigationBarTitleText" : ""
+					}
 				}
 		
 	],

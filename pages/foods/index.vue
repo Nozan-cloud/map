@@ -3,15 +3,18 @@
 		<view class="title">
 			特色美食
 		</view>
+		<view class="more" @click="toMore">
+					更多 >
+		</view>
 		<view v-for="item in foodsData" :key="item._id" @click="redirectTo(item._id)">
-			<foodItem :data="item"></foodItem>
+			<swiperSonItem :data="item"></swiperSonItem>
 		</view>
 		<view class="spaceBox"></view>
 	</view>
 </template>
 
 <script>
-import foodItem from '../../components/foodItem/foodItem.vue';
+import swiperSonItem from '../../components/swiperItemBox/swiperSonItem.vue';
 	export default {
 		data() {
 			return {
@@ -52,17 +55,23 @@ import foodItem from '../../components/foodItem/foodItem.vue';
 			};
 		},
 		components: {
-			foodItem
+			swiperSonItem
 		},
 		methods: {
 			redirectTo(id) {
 				uni.navigateTo({
 					url: `/pages/detailPages/detailPages?id=${id}`
 				})
+			},
+			// 跳转到全部
+			toMore() {
+				uni.navigateTo({
+					url: '/pages/allFoods/allFoods'
+				})
 			}
 		},
 		async mounted() {
-			const { result: { data } } = await uniCloud.database().collection('foods').get()
+			const { result: { data } } = await uniCloud.database().collection('foods').limit(6).get()
 			this.foodsData = data
 			// console.log(this.foodsData)
 		}
@@ -75,7 +84,22 @@ import foodItem from '../../components/foodItem/foodItem.vue';
 		border-left: 5px solid #13742f;
 		margin-bottom: 20px;
 		font-size: 18px;
+		display: inline-block;
 	}
+	.more {
+			display: inline-block;
+			margin-left: 190px;
+			width: 60px;
+			height: 30px;
+			line-height: 30px;
+			text-align: center;
+			border-radius: 10px;
+			/* background-color: rgba(19, 116, 47,0.3); */
+			background-color: #13742f;
+			border: 1px solid #e7f1ea;
+			color: white;
+			box-shadow: 2px 2px 3px #d1cfc9;
+		}
 	// 空白盒 这里是用来防止高度坍塌
 	.spaceBox {
 		// width: 10px;
