@@ -3,15 +3,20 @@
 		<view class="title">
 			特色美食
 		</view>
+
+		<!-- <view v-for="item in foodsData" :key="item._id" @click="redirectTo(item._id)">
+			<foodItem :data="item"></foodItem> -->
+
 		<view v-for="item in foodsData" :key="item._id" @click="redirectTo(item._id)">
-			<foodItem :data="item"></foodItem>
+			<swiperSonItem :data="item"></swiperSonItem>
+
 		</view>
 		<view class="spaceBox"></view>
 	</view>
 </template>
 
 <script>
-import foodItem from '../../components/foodItem/foodItem.vue';
+import swiperSonItem from '../../components/swiperItemBox/swiperSonItem.vue';
 	export default {
 		data() {
 			return {
@@ -52,7 +57,7 @@ import foodItem from '../../components/foodItem/foodItem.vue';
 			};
 		},
 		components: {
-			foodItem
+			swiperSonItem
 		},
 		methods: {
 			redirectTo(id) {

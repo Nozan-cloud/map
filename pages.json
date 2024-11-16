@@ -251,11 +251,27 @@
 			}
 		},
 		{
+<<<<<<< HEAD
 					"path": "pages/uni-cloud-map/uni-cloud-map",
 					"style": {
 						"navigationBarTitleText": ""
 					}
 				}
+=======
+			"path" : "pages/Product/Product",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/homeBanner/homeBanner",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		}
+>>>>>>> origin/dev_zhq
 		
 	],
 	"globalStyle": {
