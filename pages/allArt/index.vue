@@ -33,10 +33,10 @@
 		},
 		methods: {
 			//跳转到详情页
-			goDetail(e){//拿到每一个页面的id
+			goDetail(id){//拿到每一个页面的id
 			    
 				uni.navigateTo({
-					url:"/pages/datail/datail?id="+e
+					url: `/pages/detailPages/detailPages?id=${id}`
 				})
 			},
 			//获取数据库的列表

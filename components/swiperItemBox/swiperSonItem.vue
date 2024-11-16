@@ -1,6 +1,6 @@
 <template>
 	<view class="Box">
-		<view class="swiperBox" :style="{ backgroundImage: `url(${data.backgroundImg})` }">
+		<view class="swiperBox" :style="{ backgroundImage: `url(${data.pictures[0].fileID})` }">
 			<!-- 蒙层 -->
 			<view class="cover">
 				<!-- 标题 -->
