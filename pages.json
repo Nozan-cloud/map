@@ -257,6 +257,20 @@
 			"style": {
 				"navigationBarTitleText": ""
 			}
+		},
+		{
+			"path" : "pages/allArt/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/allArt/add",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
 		}
 
 
