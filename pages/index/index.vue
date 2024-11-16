@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 导航栏 -->
-		<view class="banner">
+		<view class="banner" style="margin-top: 10px;">
 			<homeBanner></homeBanner>
 		</view>
 		<!-- 必玩景区 -->
@@ -12,6 +12,7 @@
 		<view class="foods">
 			<foods></foods>
 		</view>
+		<!-- 文创产品 -->
 		<view class="products">
 			<products></products>
 		</view>
@@ -39,7 +40,7 @@ import homeBanner from '../homeBanner/homeBanner.vue'
 </script>
 
 <style lang="scss">
-	.scenicSpot, .foods, .products{
+	.scenicSpot, .foods, .products, .banner{
 		width: 350px;
 		margin: 30px auto;
 	}

@@ -55,7 +55,7 @@
 	// 	// box-shadow: 0px 1px 3px #d1cfc9;
 	// }
 	.title {
-		margin-left: 8px;
+		// margin-left: 8px;
 		margin-top: 3px;
 		padding: 3px 5px;
 		width: 80px;
