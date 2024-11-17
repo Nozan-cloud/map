@@ -10,7 +10,7 @@
 
 		<unicloud-map ref="map" :debug="false" loadtime="auto" collection="opendb-poi" :where="where" :width="750"
 			:height="heightCom" :latitude="latitude" :longitude="longitude" :scale="15" :poi-maximum="100"
-			:default-icon="defaultIcon" :custom-icons="customIcons" :polygons="polygons" :enable-scroll="true"
+			:default-icon="defaultIcon" :custom-icons="customIcons" :enable-scroll="true"
 			:enable-zoom="true" :show-compass="true" @poitap="poitap"></unicloud-map>
 
 
@@ -21,7 +21,7 @@
 				<text>搜索</text>
 			</view>
 			<view class="item">
-				<image class="icon" src="/static/image/path.png" @click="drawLine"></image>
+				<image class="icon" src="/static/image/path.png" @click="showRoutePane()"></image>
 				<text>路线</text>
 			</view>
 			<view class="item">
@@ -43,6 +43,15 @@
 				<u-search shape="round" @confirm="onSearchConfirm"></u-search>
 			</view>
 		</view>
+		<!-- route框 -->
+		<view v-if="routePanelVisible" class="search-panel" style="z-index: 20;">
+			<view class="search-panel-content">
+				<u-search shape="round" @confirm="onSearchConfirm"></u-search>
+			</view>
+			<view class="row" v-for="item in routeArr" @click="goDetail(item._id)" :key="item._id">
+				<route-box :item="item"></route-box>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -60,11 +69,13 @@
 			return {
 				isEditMode: false, // false 表示非编辑模式，true 表示编辑模式
 				searchPanelVisible: false,
+				routePanelVisible:false,
 				latitude: 23.201646,
 				longitude: 113.393793,
 				navindex: 0,
 				routeTitle: "文艺路线",
-				navarr: ["景点", "停车场", "卫生间"],
+				routeArr:[],
+				navarr: ["景点", "停车点", "卫生间"],
 				where: {
 					category: category //定义了查询条件，用于在云数据库中检索数据
 				}, // 查询条件，不支持字符串JQL形式，必须是对象形式
@@ -87,7 +98,6 @@
 						icon: "/static/image/marker.png"
 					},
 				],
-				polygons: [], // 初始化polygons数组
 				polyline: { // 初始化polyline数组
 
 				}
@@ -126,7 +136,16 @@
 					uni.hideLoading();
 				}
 			},
-
+			async getRouteData() {
+			  try {
+			    const res = await db.collection('travellog').get();
+			    console.log(res);
+			    this.routeArr = res.result.data;
+			    console.log(this.routeArr);
+			  } catch (error) {
+			    console.error('Failed to get data:', error);
+			  }
+			},
 			// 画线
 			async loadPolygonData() {
 				try {
@@ -134,6 +153,7 @@
 					const res = await db.collection('travellog').where({
 						title: this.routeTitle
 					}).get();
+					console.log(res)
 					const data = res.result.data[0].stops
 					if (data && Array.isArray(data)) {
 						const points = [];
@@ -170,6 +190,10 @@
 			setPolyline(polyline) {
 				this.polyline = polyline;
 				this.$refs.map.setPolyline(polyline);
+			},
+			showRoutePane(){
+				this.routePanelVisible = !this.routePanelVisible;
+				this.getRouteData();
 			},
 			drawLine() {
 				this.loadPolygonData();
@@ -377,6 +401,7 @@
 		.icon {
 			width: 50rpx;
 			height: 50rpx;
+			
 		}
 	}
 

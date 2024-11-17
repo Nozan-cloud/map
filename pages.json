@@ -291,6 +291,12 @@
 				"text": "首页"
 			},
 			{
+					"pagePath": "pages/uni-cloud-map/uni-cloud-map",
+					"iconPath": "static/image/导航.png",
+					"selectedIconPath": "static/image/圈子 (1).png",
+					"text": "地图"
+				},
+			{
 				"pagePath": "pages/quanzi/quanzi",
 				"iconPath": "static/image/圈子.png",
 				"selectedIconPath": "static/image/圈子 (1).png",
