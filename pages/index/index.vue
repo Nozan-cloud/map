@@ -13,9 +13,9 @@
 			<foods></foods>
 		</view>
 		<!-- 文创产品 -->
-		<view class="products">
+		<!-- <view class="products">
 			<products></products>
-		</view>
+		</view> -->
 	</view>
 </template>
 

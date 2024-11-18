@@ -64,7 +64,7 @@
 			// 跳转到全部，并传递数据库名称
 			toMore() {
 			  uni.navigateTo({
-			    url: '/pages/allArt/allArt?db=scenicSpot'
+			    url: '/pages/allArt/index?db=scenicSpot'
 			  })
 			}
 		},
