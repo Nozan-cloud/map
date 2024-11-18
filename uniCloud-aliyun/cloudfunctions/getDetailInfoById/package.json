@@ -1,5 +1,5 @@
 {
-  "name": "utilsObj",
+  "name": "getDetailInfoById",
   "dependencies": {},
   "extensions": {
     "uni-cloud-jql": {}
