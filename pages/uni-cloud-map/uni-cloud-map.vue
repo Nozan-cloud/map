@@ -62,7 +62,7 @@
 			<view class="search-panel-content">
 				<u-search shape="round" @confirm="onSearchConfirm"></u-search>
 			</view>
-			<view class="row" v-for="item in routeArr" @click="goDetail(item._id)" :key="item._id">
+			<view class="row" v-for="item in routeArr" @click="goDetail(item.title)" :key="item._id">
 				<route-box :item="item"></route-box>
 			</view>
 		</view>
@@ -85,7 +85,7 @@
 	});
 	const db = uniCloud.database();
 	const _ = db.command;
-	const category = "static-001";
+	const category = "1";
 
 	export default {
 
@@ -144,7 +144,6 @@
 					// 将读取到的数据添加到地图上
 					pois.data.forEach(poi => {
 						this.$refs.map.addPoint({
-							category: poi.category,
 							type: poi.type,
 							title: poi.title,
 							location: {
@@ -210,7 +209,10 @@
 					console.error('Error loading polygon data:', error);
 				}
 			},
-
+			goDetail(e){
+				this.routePanelVisible = !this.routePanelVisible
+				this.routeTitle = e
+			},
 			// 设置路线
 			setPolyline(polyline) {
 				this.polyline = polyline;
@@ -231,6 +233,7 @@
 					category: category,
 					type: this.navarr[index]
 				};
+				this.refresh();
 			},
 			// 搜索
 			onSearchConfirm(value) {

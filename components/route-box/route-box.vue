@@ -1,5 +1,5 @@
 <template>
-	<view class="route-box" @click="Todetail()">
+	<view class="route-box">
 		<!-- 左图中文右图 -->
 		<view class="pic">
 			<image v-if="item.pictures&&item.pictures[0]" :src="item.pictures[0]
@@ -46,11 +46,11 @@
 			};
 		},
 		methods: {
-			Todetail() {
-				uni.navigateTo({
-					url: "/pages/uni-cloud-map/uni-cloud-map"//id
-				})
-			}
+			// Todetail() {
+			// 	uni.navigateTo({
+			// 		url: "/pages/uni-cloud-map/uni-cloud-map"//id
+			// 	})
+			// }
 		}
 	}
 </script>
