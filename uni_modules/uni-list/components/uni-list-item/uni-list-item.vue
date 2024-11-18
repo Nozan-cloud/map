@@ -334,14 +334,14 @@
 
 	.uni-list-item {
 		/* #ifndef APP-NVUE */
-		display: flex;
+		
 		/* #endif */
 		font-size: $uni-font-size-lg;
 		position: relative;
 		justify-content: space-between;
 		align-items: center;
 		background-color: #fff;
-		flex-direction: row;
+		
 		/* #ifdef H5 */
 		cursor: pointer;
 		/* #endif */
@@ -358,12 +358,12 @@
 	.uni-list-item__container {
 		position: relative;
 		/* #ifndef APP-NVUE */
-		display: flex;
+		// display: flex;
 		/* #endif */
-		flex-direction: row;
+		// flex-direction: row;
 		padding: $list-item-pd;
 		padding-left: $uni-spacing-row-lg;
-		flex: 1;
+		
 		overflow: hidden;
 		// align-items: center;
 	}

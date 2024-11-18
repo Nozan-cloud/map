@@ -245,7 +245,31 @@
 			}
 		}
 		
-	],
+	,{
+    "path": "pages/tujian2/add",
+    "style": {
+        "navigationBarTitleText": "新增"
+    }
+}
+,{
+    "path": "pages/tujian2/edit",
+    "style": {
+        "navigationBarTitleText": "编辑"
+    }
+}
+,{
+    "path": "pages/tujian2/list",
+    "style": {
+        "navigationBarTitleText": "动植图鉴"
+    }
+}
+,{
+    "path": "pages/tujian2/detail",
+    "style": {
+        "navigationBarTitleText": "动植图鉴"
+    }
+}
+],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "哒宰的圈子",
