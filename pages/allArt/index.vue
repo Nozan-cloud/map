@@ -16,10 +16,12 @@
 		
 		data() {
 			return {
+				db:'',
 				listArr:[]
 			}
 		},
-		onLoad() {
+		onLoad(options) {
+			this.db = options.db
 			this.getData();
 		},
 		//触底方法
@@ -45,7 +47,7 @@
 				uniCloud.callFunction({
 					name:"art_get_all",
 					data:{
-						collectionName: 'foods',
+						collectionName: this.db,
 						skip:this.listArr.length
 					}
 				}).then(res=>{

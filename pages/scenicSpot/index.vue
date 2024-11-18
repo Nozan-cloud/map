@@ -61,11 +61,11 @@
 					url: `/pages/detailPages/detailPages?id=${id}`
 				})
 			},
-			// 跳转到全部
+			// 跳转到全部，并传递数据库名称
 			toMore() {
-				uni.navigateTo({
-					url: '/pages/allSpots/allSpots'
-				})
+			  uni.navigateTo({
+			    url: '/pages/allArt/allArt?db=scenicSpot'
+			  })
 			}
 		},
 		async mounted() {

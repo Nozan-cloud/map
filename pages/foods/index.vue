@@ -65,9 +65,9 @@ import swiperSonItem from '../../components/swiperItemBox/swiperSonItem.vue';
 			},
 			// 跳转到全部
 			toMore() {
-				uni.navigateTo({
-					url: '/pages/allFoods/allFoods'
-				})
+			  uni.navigateTo({
+			    url: '/pages/allArt/allArt?db=foods'
+			  })
 			}
 		},
 		async mounted() {
