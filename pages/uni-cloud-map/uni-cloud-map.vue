@@ -2,7 +2,7 @@
 	<view class="page">
 		<!-- 顶部导航栏 -->
 		<scroll-view scroll-x="true" class="navscroll">
-			<view class="item" :class="index == navindex ? 'active' : ''" v-for="(item, index) in navarr" :key="index"
+			<view class="item" :class="index == navindex? 'active' : ''" v-for="(item, index) in navarr" :key="index"
 				@click="navclick(index)">
 				{{ item }}
 			</view>
@@ -10,8 +10,22 @@
 
 		<unicloud-map ref="map" :debug="false" loadtime="auto" collection="opendb-poi" :where="where" :width="750"
 			:height="heightCom" :latitude="latitude" :longitude="longitude" :scale="15" :poi-maximum="100"
-			:default-icon="defaultIcon" :custom-icons="customIcons" :enable-scroll="true"
-			:enable-zoom="true" :show-compass="true" @poitap="poitap"></unicloud-map>
+			:default-icon="defaultIcon" :custom-icons="customIcons" :enable-scroll="true" :enable-zoom="true"
+			:show-compass="true" @poitap="poitap"></unicloud-map>
+
+
+		<!-- 新增：查看地点详情信息的弹窗 -->
+		<uni-popup ref="popup" type="center">
+			<view class="popup-content">
+				<image :src="selectedPoi.image" mode="aspectFill" class="popup-image" @click="openImagePopup"></image>
+				<view class="popup-info">
+					<text class="popup-title">{{ selectedPoi.title }}</text>
+					<text class="popup-address">详细地址：{{ selectedPoi.address }}</text>
+					<text class="popup-other-info">其他信息：{{ selectedPoi.otherInfo || '暂无其他信息' }}</text>
+				</view>
+				<button @click="closePopup">关闭</button>
+			</view>
+		</uni-popup>
 
 
 		<!-- 悬浮按钮栏，设置 z-index 确保在地图上方显示 -->
@@ -30,7 +44,7 @@
 			</view>
 		</view>
 
-	<!-- 	<view v-if="!isEditMode" class="goAdd" @click="goAdd()" style="z-index: 10;">
+		<!-- 	<view v-if="!isEditMode" class="goAdd" @click="goAdd()" style="z-index: 10;">
 			<uni-icons type="plusempty" size="30" color="white"></uni-icons>
 		</view>
 		<view v-if="isEditMode" class="closeAdd" @click="goAdd()" style="z-index: 10;">
@@ -52,7 +66,15 @@
 				<route-box :item="item"></route-box>
 			</view>
 		</view>
+		<!-- 新增：图片放大弹窗 -->
+		<uni-popup ref="imagePopup" type="center">
+			<image :src="selectedPoi.image" mode="widthFix" class="enlarged-image" @click="closeImagePopup"></image>
+		</uni-popup>
 	</view>
+
+	
+
+
 </template>
 
 <script>
@@ -64,18 +86,21 @@
 	const db = uniCloud.database();
 	const _ = db.command;
 	const category = "static-001";
+
 	export default {
+
 		data() {
 			return {
 				isEditMode: false, // false 表示非编辑模式，true 表示编辑模式
 				searchPanelVisible: false,
-				routePanelVisible:false,
+				routePanelVisible: false,
 				latitude: 23.201646,
 				longitude: 113.393793,
 				navindex: 0,
 				routeTitle: "文艺路线",
-				routeArr:[],
+				routeArr: [],
 				navarr: ["景点", "停车点", "卫生间"],
+				selectedPoi: {}, // 新增：用于存储选中的POI信息
 				where: {
 					category: category //定义了查询条件，用于在云数据库中检索数据
 				}, // 查询条件，不支持字符串JQL形式，必须是对象形式
@@ -137,14 +162,14 @@
 				}
 			},
 			async getRouteData() {
-			  try {
-			    const res = await db.collection('travellog').get();
-			    console.log(res);
-			    this.routeArr = res.result.data;
-			    console.log(this.routeArr);
-			  } catch (error) {
-			    console.error('Failed to get data:', error);
-			  }
+				try {
+					const res = await db.collection('travellog').get();
+					console.log(res);
+					this.routeArr = res.result.data;
+					console.log(this.routeArr);
+				} catch (error) {
+					console.error('Failed to get data:', error);
+				}
 			},
 			// 画线
 			async loadPolygonData() {
@@ -191,7 +216,7 @@
 				this.polyline = polyline;
 				this.$refs.map.setPolyline(polyline);
 			},
-			showRoutePane(){
+			showRoutePane() {
 				this.routePanelVisible = !this.routePanelVisible;
 				this.getRouteData();
 			},
@@ -232,6 +257,72 @@
 					}
 				});
 			},
+			// 导航弹窗
+			showActionSheet(poi) {
+				let itemList = ["导航到这里", "查看详情"];
+				uni.showActionSheet({
+					title: poi.title,
+					itemList: itemList,
+					success: async (res) => {
+						let item = itemList[res.tapIndex];
+						if (item === "导航到这里") {
+							uni.openLocation({
+								type: 'gcj02',
+								latitude: poi.location.coordinates[1],
+								longitude: poi.location.coordinates[0],
+								name: poi.title,
+								address: poi.address
+							});
+						} else if (item === "查看详情") {
+							try {
+								const {
+									result
+								} = await uniCloud.callFunction({
+									name: 'getDetailInfoById',
+									data: {
+										poiId: poi._id
+									} // 传入 opendb-poi 表的 _id
+								});
+
+								if (result.code === 0) {
+									this.selectedPoi = {
+										...poi,
+										address: result.data.address,
+										image: result.data.image,
+										otherInfo: result.data.otherInfo
+									};
+									this.$refs.popup.open(); // 打开弹窗
+								} else {
+									console.error(result.msg);
+									uni.showToast({
+										title: '查询详情失败',
+										icon: 'none'
+									});
+								}
+							} catch (err) {
+								console.error(err);
+								uni.showToast({
+									title: '查询详情失败',
+									icon: 'none'
+								});
+							}
+						}
+					}
+				});
+			},
+			// 关闭详情弹窗
+			closePopup() {
+				this.$refs.popup.close();
+			},
+			// 打开图片放大弹窗
+			openImagePopup() {
+				this.$refs.imagePopup.open();
+			},
+			// 关闭图片放大弹窗
+			closeImagePopup() {
+				this.$refs.imagePopup.close();
+			},
+
 			setMapCenter({
 				latitude,
 				longitude
@@ -259,26 +350,6 @@
 					poi
 				} = e;
 				this.showActionSheet(poi);
-			},
-			// 导航弹窗
-			showActionSheet(poi) {
-				let itemList = ["导航到这里"];
-				uni.showActionSheet({
-					title: poi.title,
-					itemList: itemList,
-					success: (res) => {
-						let item = itemList[res.tapIndex];
-						if (item === "导航到这里") {
-							uni.openLocation({
-								type: 'gcj02',
-								latitude: poi.location.coordinates[1],
-								longitude: poi.location.coordinates[0],
-								name: poi.title,
-								address: poi.address
-							});
-						}
-					}
-				});
 			},
 			//点击新增标记点
 			goAdd() {
@@ -314,6 +385,7 @@
 				return `${systemInfo.windowHeight+50}px`;
 			}
 		}
+
 	}
 </script>
 
@@ -401,7 +473,7 @@
 		.icon {
 			width: 50rpx;
 			height: 50rpx;
-			
+
 		}
 	}
 
@@ -418,5 +490,67 @@
 
 	.search-panel-content {
 		margin: 10rpx 10rpx;
+	}
+
+	.popup-content {
+		padding: 20px;
+		background-color: #fff;
+		border-radius: 10px;
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-start;
+		max-width: 80%;
+		/* 限制最大宽度，适应小屏幕设备 */
+		max-height: 80vh;
+		/* 限制最大高度，适应小屏幕设备 */
+		overflow-y: auto;
+		/* 如果内容超过弹窗高度，则出现滚动条 */
+
+		.popup-image {
+			width: 100%;
+			max-height: 200px;
+			object-fit: cover;
+			margin-bottom: 10px;
+		}
+
+		.popup-info {
+			width: 100%;
+			box-sizing: border-box;
+			padding: 0 10px;
+			flex-grow: 1;
+			/* 占据剩余空间 */
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: flex-start;
+			overflow-y: auto;
+			/* 允许内容滚动 */
+		}
+
+		.enlarged-image {
+			width: 90%;
+			/* 图片宽度占弹窗的90% */
+			max-width: 100%;
+			/* 确保图片不会超出屏幕宽度 */
+			max-height: 90vh;
+			/* 最大高度不超过屏幕高度的90% */
+			object-fit: contain;
+			/* 保持图片比例，同时填充可用空间 */
+			cursor: pointer;
+			/* 鼠标指针变为手指形状，提示可点击 */
+		}
+
+		.popup-title,
+		.popup-address,
+		.popup-other-info {
+			width: 100%;
+			font-size: 14px;
+			color: #666;
+			margin-bottom: 10px;
+			word-break: break-all;
+			/* 长单词或URL自动换行 */
+		}
 	}
 </style>
