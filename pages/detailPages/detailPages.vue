@@ -11,7 +11,7 @@
 		<view class="describBox">
 			<view class="titleBox">
 				<view class="begin"></view>
-				<img src="../../static/image/详情-位置图标.png" alt="" />
+				<img src="../../static/image/marker.png" alt="" />
 				<view class="title">
 					{{ detailData.title }}
 				</view>

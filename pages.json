@@ -286,14 +286,14 @@
 		"selectedColor": "#13742F",
 		"list": [{
 				"pagePath": "pages/index/index",
-				"iconPath": "static/image/圈子.png",
-				"selectedIconPath": "static/image/圈子 (1).png",
+				"iconPath": "static/image/首页.png",
+				"selectedIconPath": "static/image/首页 (1).png",
 				"text": "首页"
 			},
 			{
 					"pagePath": "pages/uni-cloud-map/uni-cloud-map",
-					"iconPath": "static/image/导航.png",
-					"selectedIconPath": "static/image/圈子 (1).png",
+					"iconPath": "static/image/map.png",
+					"selectedIconPath": "static/image/map(1).png",
 					"text": "地图"
 				},
 			{

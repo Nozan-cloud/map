@@ -73,7 +73,7 @@ import swiperSonItem from '../../components/swiperItemBox/swiperSonItem.vue';
 		async mounted() {
 			const { result: { data } } = await uniCloud.database().collection('foods').limit(6).get()
 			this.foodsData = data
-			// console.log(this.foodsData)
+			console.log(this.foodsData)
 		}
 	}
 </script>
