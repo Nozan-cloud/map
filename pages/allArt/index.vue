@@ -78,7 +78,9 @@
 		
 		.row{
 			border-bottom: 1px dotted #efefef;
-			padding: 20rpx 0;
+			border-radius: 25rpx;
+			overflow: hidden;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
 		}
 	}
 	.goAdd{
