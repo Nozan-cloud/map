@@ -22,6 +22,9 @@
 		},
 		props: {
 			data: Object
+		},
+		updated() {
+			console.log(data)
 		}
 	}
 </script>
