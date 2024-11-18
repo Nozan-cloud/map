@@ -4,6 +4,9 @@
 		<view class="title">
 			必玩景区
 		</view>
+		<view class="more" @click="toMore">
+					更多 >
+		</view>
 		<!-- 轮播图 -->
 		<view class="box">
 			<view>
@@ -57,11 +60,17 @@
 				uni.navigateTo({
 					url: `/pages/detailPages/detailPages?id=${id}`
 				})
+			},
+			// 跳转到全部
+			toMore() {
+				uni.navigateTo({
+					url: '/pages/allSpots/allSpots'
+				})
 			}
 		},
 		async mounted() {
 			// 从数据库拿数据
-			const { result: { data } } = await uniCloud.database().collection('scenicSpot').get()
+			const { result: { data } } = await uniCloud.database().collection('scenicSpot').limit(4).get()
 			// console.log(data)
 			this.scenicData = data
 		}
@@ -74,7 +83,22 @@
 		border-left: 5px solid #13742f;
 		margin-bottom: 20px;
 		font-size: 18px;
+		display: inline-block;
 	}
+	.more {
+			display: inline-block;
+			margin-left: 190px;
+			width: 60px;
+			height: 30px;
+			line-height: 30px;
+			text-align: center;
+			border-radius: 10px;
+			/* background-color: rgba(19, 116, 47,0.3); */
+			background-color: #13742f;
+			border: 1px solid #e7f1ea;
+			color: white;
+			box-shadow: 2px 2px 3px #d1cfc9;
+		}
 	.swiperBox {
 		height: 250px;
 	}
