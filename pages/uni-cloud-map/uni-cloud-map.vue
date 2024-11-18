@@ -21,7 +21,7 @@
 				<text>搜索</text>
 			</view>
 			<view class="item">
-				<image class="icon" src="/static/image/path.png" @click="showRoutePane()"></image>
+				<image class="icon" ref="routePanel" src="/static/image/path.png" @click="showRoutePane()"></image>
 				<text>路线</text>
 			</view>
 			<view class="item">
