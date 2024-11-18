@@ -18,7 +18,7 @@
 		},
 		props: {
 			data: Object
-		}
+		},
 	}
 </script>
 
