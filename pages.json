@@ -259,22 +259,42 @@
 			}
 		},
 		{
-			"path" : "pages/allArt/index",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
+			"path": "pages/allArt/index",
+			"style": {
+				"navigationBarTitleText": ""
 			}
 		},
 		{
-			"path" : "pages/allArt/add",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
+			"path": "pages/allArt/add",
+			"style": {
+				"navigationBarTitleText": ""
 			}
 		}
 
 
+		, {
+			"path": "pages/tujian2/add",
+			"style": {
+				"navigationBarTitleText": "新增"
+			}
+		}, {
+			"path": "pages/tujian2/edit",
+			"style": {
+				"navigationBarTitleText": "编辑"
+			}
+		}, {
+			"path": "pages/tujian2/list",
+			"style": {
+				"navigationBarTitleText": "动植图鉴"
+			}
+		}, {
+			"path": "pages/tujian2/detail",
+			"style": {
+				"navigationBarTitleText": "动植图鉴"
+			}
+		}
 	],
+
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "哒宰的圈子",
@@ -291,11 +311,11 @@
 				"text": "首页"
 			},
 			{
-					"pagePath": "pages/uni-cloud-map/uni-cloud-map",
-					"iconPath": "static/image/map.png",
-					"selectedIconPath": "static/image/map(1).png",
-					"text": "地图"
-				},
+				"pagePath": "pages/uni-cloud-map/uni-cloud-map",
+				"iconPath": "static/image/map.png",
+				"selectedIconPath": "static/image/map(1).png",
+				"text": "地图"
+			},
 			{
 				"pagePath": "pages/quanzi/quanzi",
 				"iconPath": "static/image/圈子.png",
