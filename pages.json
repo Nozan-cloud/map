@@ -211,12 +211,6 @@
 			}
 		},
 		{
-			"path": "pages/foods/index",
-			"style": {
-				"navigationBarTitleText": ""
-			}
-		},
-		{
 			"path": "pages/detailPages/detailPages",
 			"style": {
 				"navigationBarTitleText": ""
@@ -224,18 +218,6 @@
 		},
 		{
 			"path": "pages/uni-cloud-map/uni-cloud-map",
-			"style": {
-				"navigationBarTitleText": ""
-			}
-		},
-		{
-			"path": "pages/Product/Product",
-			"style": {
-				"navigationBarTitleText": ""
-			}
-		},
-		{
-			"path": "pages/homeBanner/homeBanner",
 			"style": {
 				"navigationBarTitleText": ""
 			}
