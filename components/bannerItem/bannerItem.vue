@@ -30,7 +30,7 @@
 		.imgBox {
 			width: 50px;
 			height: 50px;
-			background-image: url('../../static/image/导航栏/攻略游记.png');
+			// background-image: url('../../static/image/导航栏/攻略游记.png');
 			background-repeat: no-repeat;
 			background-size: cover;
 			background-color: white;
