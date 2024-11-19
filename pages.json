@@ -193,18 +193,6 @@
 			}
 		},
 		{
-			"path": "pages/photodetail/photodetail",
-			"style": {
-				"navigationBarTitleText": "详细信息"
-			}
-		},
-		{
-			"path": "pages/dictionar/dictionar",
-			"style": {
-				"navigationBarTitleText": "动植图鉴"
-			}
-		},
-		{
 			"path": "pages/travellog/travellog",
 			"style": {
 				"navigationBarTitleText": "游览攻略"
@@ -220,12 +208,6 @@
 			"path": "pages/addtravellog/addtravellog",
 			"style": {
 				"navigationBarTitleText": "新增攻略"
-			}
-		},
-		{
-			"path": "pages/uploadpic/uploadpic",
-			"style": {
-				"navigationBarTitleText": ""
 			}
 		},
 		{
@@ -304,7 +286,7 @@
 
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "哒宰的圈子",
+		"navigationBarTitleText": "紫荆旅图",
 		"navigationBarBackgroundColor": "#13742F",
 		"backgroundColor": "#F8F8F8"
 	},

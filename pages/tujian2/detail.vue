@@ -101,7 +101,7 @@
 <style>
   .container {
     padding: 10px;
-	background-image: url('/static/image/3.jpg'); /* 指定背景图片的路径 */
+	background-image: url('https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/3.jpg'); /* 指定背景图片的路径 */
 	background-size: cover; /* 背景图片覆盖整个元素 */
 	background-position: 50% 50%;
 	  overflow-y: auto; /* 当内容超出容器高度时，显示滚动条 */
@@ -158,7 +158,7 @@
 	white-space: pre-wrap; /* 保持空白符和换行符，同时允许在单词内部进行换行 */
   }
   .info-box2{
-	background-image: url('/static/image/1.png');
+	background-image: url('https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/1.jpg');
 	background-size: 30%; /* 这将背景图片的大小设置为容器大小的20% */
 	background-repeat: no-repeat;
 	flex: 0 0 60%; /* box2 固定宽度为60% */

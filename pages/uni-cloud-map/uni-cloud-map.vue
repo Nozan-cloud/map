@@ -104,23 +104,23 @@
 				where: {
 					category: category //定义了查询条件，用于在云数据库中检索数据
 				}, // 查询条件，不支持字符串JQL形式，必须是对象形式
-				defaultIcon: "/static/image/marker.png", // 默认图标
+				defaultIcon: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/.png", // 默认图标
 				// 自定义图标
 				customIcons: [{
 						type: "景点",
-						icon: "/static/image/marker.png"
+						icon: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/.png"
 					},
 					{
 						type: "卫生间",
-						icon: "/static/image/tolet.png"
+						icon: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/tolet.png"
 					},
 					{
 						type: "停车点",
-						icon: "/static/image/park.png"
+						icon: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/park.png"
 					},
 					{
 						type: "你的位置",
-						icon: "/static/image/marker.png"
+						icon: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/marker.png"
 					},
 				],
 				polyline: { // 初始化polyline数组
@@ -182,14 +182,15 @@
 					if (data && Array.isArray(data)) {
 						const points = [];
 						for (let item of data) {
-							console.log(item.title)
-							const resloc = await db.collection('opendb-poi').where({
+							// console.log(item.title)
+							const loc = await db.collection('opendb-poi').where({
 								title: item.title
 							}).get();
-							console.log(resloc)
+							const resloc = loc.result.data[0].location
+							// console.log(resloc)
 							points.push({
 								longitude: resloc.coordinates[0],
-								latitude: reloc.coordinates[1]
+								latitude: resloc.coordinates[1]
 							});
 						}
 						let polyline = [{
@@ -385,7 +386,7 @@
 		computed: {
 			heightCom() {
 				let systemInfo = uni.getSystemInfoSync();
-				return `${systemInfo.windowHeight+50}px`;
+				return `${systemInfo.windowHeight}px`;
 			}
 		}
 

@@ -47,7 +47,7 @@
 				uniCloud.callFunction({
 					name:"art_get_all",
 					data:{
-						collectionName: this.db,
+						collectionName: 'scenicSpot',
 						skip:this.listArr.length
 					}
 				}).then(res=>{
@@ -77,10 +77,11 @@
 		padding: 30rpx;
 		
 		.row{
+			margin-bottom: 20rpx;
 			border-bottom: 1px dotted #efefef;
 			border-radius: 25rpx;
 			overflow: hidden;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* 添加阴影效果 */
 		}
 	}
 	.goAdd{
