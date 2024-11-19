@@ -21,6 +21,7 @@
 			}
 		},
 		onLoad(options) {
+			console.log(options)
 			this.db = options.db
 			this.getData();
 		},
@@ -47,7 +48,7 @@
 				uniCloud.callFunction({
 					name:"art_get_all",
 					data:{
-						collectionName: 'scenicSpot',
+						collectionName: this.db,
 						skip:this.listArr.length
 					}
 				}).then(res=>{

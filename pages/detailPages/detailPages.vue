@@ -43,14 +43,20 @@
 			};
 		},
 		// 获取从上一个页面跳转过来的路由参数
-		onLoad: async function (option){
-			// console.log(option)	
-			const {result: {data}} = await uniCloud.database().collection('foods').where({
-				_id: option.id//这里注意要.id
-			}).get()
-			this.detailData = data[0]
+		  onLoad: async function (options) {
+		    // console.log(type,id); // 打印查看传递的参数
+		    const {
+				type,id
+			}=options
 			
-		}
+		   
+		      const { result: { data } } = await uniCloud.database().collection(options.type).where({
+		        _id: id
+		      }).get();
+		      this.detailData = data[0];
+			  console.log(data)
+		   
+		  }
 	}
 </script>
 
