@@ -31,7 +31,7 @@
 						id: 2,
 						img: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/Lvto/导航栏图标/图鉴.png",
 						title: "图鉴",
-						jumpTo: "/pages/dictionar/dictionar"
+						jumpTo: "/pages/tujian2/list"
 					},
 					{
 						id: 3,

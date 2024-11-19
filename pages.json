@@ -249,7 +249,7 @@
 		{
 			"path": "pages/Product/Product",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "文创产品"
 			}
 		},
 		{
@@ -297,7 +297,7 @@
 			"path" : "pages/wait/wait",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "页面施工中"
 			}
 		}
 	],
