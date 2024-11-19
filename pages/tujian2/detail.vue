@@ -140,7 +140,7 @@
 	}
 	@font-face {
 	font-family: 'daoli'; /* 自定义字体名称 */
-	src: url('/static/fonts/AlimamaDaoLiTi.ttf') format('truetype'); /* 字体文件路径和格式 */
+	src: url('https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/fonts/AlimamaDaoLiTi.ttf') format('truetype'); /* 字体文件路径和格式 */
 	}
   .info-box1{
 	font-family: 'daoli', 'KaiTi', sans-serif; /* 首先使用自定义字体，然后是楷体，最后是回退字体 */
