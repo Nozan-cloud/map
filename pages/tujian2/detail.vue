@@ -158,7 +158,7 @@
 	white-space: pre-wrap; /* 保持空白符和换行符，同时允许在单词内部进行换行 */
   }
   .info-box2{
-	background-image: url('/static/image/1.png');
+	background-image: url('/static/image/1.jpg');
 	background-size: 30%; /* 这将背景图片的大小设置为容器大小的20% */
 	background-repeat: no-repeat;
 	flex: 0 0 60%; /* box2 固定宽度为60% */
