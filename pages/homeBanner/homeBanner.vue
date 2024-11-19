@@ -6,7 +6,9 @@
 		</view>
 		<view class="box">
 			<view class="itemBox" v-for="item in bannerData" :key="item.id">
-				<bannerItem :data="item"></bannerItem>
+				<view @click="navigateTo(item.jumpTo)">
+					<bannerItem :data="item"></bannerItem>
+				</view>
 			</view>
 			<view class="space"></view>
 		</view>
@@ -21,29 +23,48 @@
 				bannerData: [
 					{
 						id: 1,
-						img: "../../static/image/导航栏/攻略游记.png",
-						title: "攻略游记"
+						img: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/Lvto/导航栏图标/攻略游记.png",
+						title: "攻略游记",
+						jumpTo: "/pages/uni-cloud-map/uni-cloud-map"
 					},
 					{
 						id: 2,
-						img: "../../static/image/导航栏/图鉴.png",
-						title: "图鉴"
+						img: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/Lvto/导航栏图标/图鉴.png",
+						title: "图鉴",
+						jumpTo: "/pages/dictionar/dictionar"
 					},
 					{
 						id: 3,
-						img: "../../static/image/导航栏/文创产品.png",
-						title: "文创产品"
+						img: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/Lvto/导航栏图标/文创产品.png",
+						title: "文创产品",
+						jumpTo: "/pages/wait/wait"
 					},
 					{
 						id: 4,
-						img: "../../static/image/导航栏/更多.jpg",
-						title: "更多"
+						img: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/Lvto/导航栏图标/更多.jpg",
+						title: "更多",
+						jumpTo:"/pages/wait/wait"
 					}
 				]
 			};
 		},
 		components: {
 			bannerItem
+		},
+		methods: {
+			navigateTo(jumpTo) {
+				// 跳转到地图
+				if ( jumpTo === "/pages/uni-cloud-map/uni-cloud-map" ) {
+					uni.switchTab({
+						url: jumpTo
+					})
+					return
+				}
+				// 跳转到其他
+				uni.navigateTo({
+					url: jumpTo
+				})
+			}
 		}
 	}
 </script>

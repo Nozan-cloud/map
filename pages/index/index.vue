@@ -13,9 +13,9 @@
 			<foods></foods>
 		</view>
 		<!-- 文创产品 -->
-		<!-- <view class="products">
-			<products></products>
-		</view> -->
+		<view class="products">
+			<products :baseImgUrl="baseImgUrl"></products>
+		</view>
 	</view>
 </template>
 
@@ -27,7 +27,8 @@ import homeBanner from '../homeBanner/homeBanner.vue'
 	export default {
 		data() {
 			return {
-				
+				// 下载图片基地址
+				baseImgUrl:'https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/Lvto/文创',
 			};
 		},
 		components:{
