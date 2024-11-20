@@ -57,6 +57,7 @@
             "minified" : true
         },
         "usingComponents" : true,
+        "lazyCodeLoading" : "requiredComponents", //按需注入
         "permission" : {
             "scope.userLocation" : {
                 "desc" : "将获取您的位置信息，用于导航，路线规划"

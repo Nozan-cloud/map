@@ -223,6 +223,7 @@
 		/* border: 1rpx red solid; */
 		font-size: 18px;
 		padding-left: 10rpx;
+		color: #13742F;
 	}
 
 	.more {
