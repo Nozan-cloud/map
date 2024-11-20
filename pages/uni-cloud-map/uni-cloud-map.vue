@@ -72,7 +72,7 @@
 	import {
 		uniSearchBar
 	} from '@dcloudio/uni-ui';
-	import x from '@/theme.scss';
+	import x from '@/theme.scss'
 	var timer;
 	const uniMapCo = uniCloud.importObject('uni-map-co', {
 		customUI: true
@@ -85,6 +85,7 @@
 		components: {
 			uniSearchBar
 		},
+
 		data() {
 			return {
 				isEditMode: false, // false 表示非编辑模式，true 表示编辑模式
@@ -96,7 +97,9 @@
 				longitude: 113.393793,
 				navindex: 0,
 				routeTitle: "文艺路线",
-				navarr: ["景点", "停车场", "卫生间"],
+				routeArr: [],
+				navarr: ["景点", "停车点", "卫生间"],
+				selectedPoi: {}, // 新增：用于存储选中的POI信息
 				where: {
 					category: category //定义了查询条件，用于在云数据库中检索数据
 				}, // 查询条件，不支持字符串JQL形式，必须是对象形式
@@ -117,13 +120,11 @@
 					{
 						type: "你的位置",
 						icon: "/static/image/marker.png"
-					}
+					},
 				],
-				polygons: [], // 初始化polygons数组
 				polyline: { // 初始化polyline数组
 
-				},
-				selectedPoi: {} // 新增：用于存储选中的POI信息
+				}
 			}
 		},
 		onLoad() {
@@ -191,7 +192,6 @@
 					console.error('Failed to get data:', error);
 				}
 			},
-
 			// 画线
 			async loadPolygonData() {
 				try {
@@ -199,33 +199,31 @@
 					const res = await db.collection('travellog').where({
 						title: this.routeTitle
 					}).get();
-					const data = res.result.data[0].stops;
+					console.log(res)
+					const data = res.result.data[0].stops
 					if (data && Array.isArray(data)) {
 						const points = [];
 						for (let item of data) {
-							console.log(item.title);
+							console.log(item.title)
 							const resloc = await db.collection('opendb-poi').where({
 								title: item.title
 							}).get();
-							console.log(resloc);
-							if (resloc && resloc.data && resloc.data.length > 0) {
-								const coordinates = resloc.data[0].location.coordinates;
-								points.push({
-									longitude: coordinates[0],
-									latitude: coordinates[1]
-								});
-							}
+							console.log(resloc)
+							points.push({
+								longitude: resloc.coordinates[0],
+								latitude: reloc.coordinates[1]
+							});
 						}
 						let polyline = [{
 							points,
-							color: "#19b411",
+							color: "#19b411", //#6eb6ff
 							width: 6,
 							dottedLine: false,
 							arrowLine: true,
 							borderWidth: 1,
 							borderColor: "#000000",
 						}]
-						this.setPolyline(polyline);
+						this.setPolyline(polyline)
 					} else {
 						console.log('No data or data is not in the expected format');
 					}
@@ -237,11 +235,14 @@
 				this.routePanelVisible = !this.routePanelVisible
 				this.routeTitle = e
 			},
-
 			// 设置路线
 			setPolyline(polyline) {
 				this.polyline = polyline;
 				this.$refs.map.setPolyline(polyline);
+			},
+			showRoutePane() {
+				this.routePanelVisible = !this.routePanelVisible;
+				this.getRouteData();
 			},
 			drawLine() {
 				this.loadPolygonData();
@@ -309,19 +310,19 @@
 							enableHighAccuracy: true
 						}
 					});
-
+			
 					// 设置地图的中心点为当前位置
 					this.latitude = res.latitude;
 					this.longitude = res.longitude;
-
+			
 					// 刷新地图以显示新的位置
 					await this.$refs.map.refresh({
 						needIncludePoints: true
 					});
-
+			
 					// 在地图上添加当前位置的标记
 					this.addCurrentLocationMarker(res.latitude, res.longitude);
-
+			
 					uni.hideLoading();
 				} catch (err) {
 					console.error('获取位置失败', err);
@@ -366,34 +367,6 @@
 				}
 				return iconPath;
 			},
-			setMapCenter({
-				latitude,
-				longitude
-			}) {
-				this.latitude = latitude;
-				this.longitude = longitude;
-				if (this.$refs.map && typeof this.$refs.map.centerAndZoom === 'function') {
-					this.$refs.map.centerAndZoom({
-						latitude,
-						longitude
-					}, 16);
-				} else {
-					console.error('centerAndZoom is not a function');
-				}
-			},
-			// 刷新地图
-			async refresh() {
-				await this.$refs.map.refresh({
-					needIncludePoints: true
-				});
-			},
-			// 监听 - 拍击POI事件
-			poitap(e) {
-				let {
-					poi
-				} = e;
-				this.showActionSheet(poi);
-			},
 			// 导航弹窗
 			showActionSheet(poi) {
 				let itemList = ["导航到这里", "查看详情"];
@@ -428,25 +401,24 @@
 										image: result.data.image,
 										otherInfo: result.data.otherInfo
 									};
-									this.$refs.popup.open(); // 开启弹窗
+									this.$refs.popup.open(); // 打开弹窗
 								} else {
 									console.error(result.msg);
 									uni.showToast({
-										title: '没有更多信息了哦',
+										title: '当前没有更多信息',
 										icon: 'none'
 									});
 								}
 							} catch (err) {
 								console.error(err);
 								uni.showToast({
-									title: '没有更多信息了哦',
+									title: '当前没有更多信息',
 									icon: 'none'
 								});
 							}
 						}
 					}
 				});
-
 			},
 			// 关闭详情弹窗
 			closePopup() {
@@ -459,6 +431,35 @@
 			// 关闭图片放大弹窗
 			closeImagePopup() {
 				this.$refs.imagePopup.close();
+			},
+
+			setMapCenter({
+				latitude,
+				longitude
+			}) {
+				this.latitude = latitude;
+				this.longitude = longitude;
+				if (this.$refs.map && typeof this.$refs.map.centerAndZoom === 'function') {
+					this.$refs.map.centerAndZoom({
+						latitude,
+						longitude
+					}, 16);
+				} else {
+					console.error('centerAndZoom is not a function');
+				}
+			},
+			// 刷新地图
+			async refresh() {
+				await this.$refs.map.refresh({
+					needIncludePoints: true
+				});
+			},
+			// 监听 - 点击POI事件
+			poitap(e) {
+				let {
+					poi
+				} = e;
+				this.showActionSheet(poi);
 			},
 			//点击新增标记点
 			goAdd() {
@@ -483,6 +484,10 @@
 			toggleSearchPanel() {
 				this.searchPanelVisible = !this.searchPanelVisible;
 			},
+			// onSearchConfirm(value) {
+			// 	console.log("搜索:", value);
+			// 	this.searchPanelVisible = false;
+			// },
 			// 实时获取输入内容
 			onSearchInput(event) {
 				console.log('onSearchInput event:', event);
@@ -507,9 +512,10 @@
 		computed: {
 			heightCom() {
 				let systemInfo = uni.getSystemInfoSync();
-				return `${systemInfo.windowHeight + 50}px`;
+				return `${systemInfo.windowHeight+50}px`;
 			}
 		}
+
 	}
 </script>
 
@@ -597,6 +603,7 @@
 		.icon {
 			width: 50rpx;
 			height: 50rpx;
+
 		}
 	}
 
