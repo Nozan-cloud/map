@@ -50,7 +50,7 @@
 			}=options
 			
 		   
-		      const { result: { data } } = await uniCloud.database().collection(options.t).where({
+		      const { result: { data } } = await uniCloud.database().collection(options.type).where({
 		        _id: id
 		      }).get();
 		      this.detailData = data[0];
