@@ -211,19 +211,21 @@
 					const res = await db.collection('travellog').where({
 						title: this.routeTitle
 					}).get();
-					console.log(res)
+					// console.log(res)
 					const data = res.result.data[0].stops
 					if (data && Array.isArray(data)) {
 						const points = [];
 						for (let item of data) {
 							console.log(item.title)
-							const resloc = await db.collection('opendb-poi').where({
+							const loc = await db.collection('opendb-poi').where({
 								title: item.title
 							}).get();
-							console.log(resloc)
+							console.log(loc)
+							const resloc = loc.data
+							// console.log(resloc)
 							points.push({
 								longitude: resloc.coordinates[0],
-								latitude: reloc.coordinates[1]
+								latitude: resloc.coordinates[1]
 							});
 						}
 						let polyline = [{
