@@ -2,7 +2,7 @@
 	<view class="Box">
 		<!-- 图片轮播 -->
 		<swiper class="swiperBox" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
-				<swiper-item v-for="item in detailData.pictures" :key="item">
+				<swiper-item v-for="item in detailData.pictures" :key="item._id">
 					<view class="swiper-item">
 						<img :src="item.fileID" alt="" />
 					</view>
@@ -44,14 +44,14 @@
 		},
 		// 获取从上一个页面跳转过来的路由参数
 		  onLoad: async function (options) {
-		    // console.log(type,id); // 打印查看传递的参数
+		    
 		    const {
 				type,id
 			}=options
-			
+			console.log("options:",options); // 打印查看传递的参数
 		   
 		      const { result: { data } } = await uniCloud.database().collection(options.type).where({
-		        _id: id
+		        _id: options.id
 		      }).get();
 		      this.detailData = data[0];
 			  console.log(data)

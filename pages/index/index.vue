@@ -22,7 +22,18 @@
 			<swiper class="swiper" autoplay="true" circular="true" indicator-dots="true">
 				<swiper-item class="swiper-item" v-for="(item, index) in featureSpots" :key="index"
 					@click="redirectTo('scenicSpot',item._id)">
-					<image class="spot-image" :src="item.pictures[0].fileID" mode="aspectFill"></image>
+					<view class="spot-item">
+					  <image class="spot-image" :src="item.pictures[0].fileID" mode="aspectFill"></image>
+					  <view class="spot-info">
+					    <text class="spot-title">{{ item.title }}</text>
+						<view class="location-item">
+							<image class="location-icon" src="/static/image/位置图标.png" mode="aspectFit"></image>
+							<text class="spot-location">483号华南农业大学</text>
+						</view>
+					  
+					  </view>
+					</view>
+				
 				</swiper-item>
 			</swiper>
 		</view>
@@ -37,9 +48,10 @@
 				</view>
 			</view>
 			<view class="delicacies-grid">
-				<view class="delicacy-item" v-for="(item, index) in delicacies" :key="index" @click="redirectTo('foods',item._id)">
-					<image class="delicacy-image" :src="item.pictures[0].fileID"></image>
-				</view>
+			  <view class="delicacy-item" v-for="(item, index) in delicacies" :key="index" @click="redirectTo('foods', item._id)">
+			    <image class="delicacy-image" :src="item.pictures[0].fileID"></image>
+			    <view class="delicacy-title">{{ item.title }}</view> <!-- 新增标题 -->
+			  </view>
 			</view>
 		</view>
 
@@ -55,6 +67,7 @@
 			<view class="creations-grid">
 				<view class="creation-item" v-for="(item, index) in creations" :key="index" @click="redirectTo('products',item._id)">
 					<image class="creation-image" :src="item.pictures[0].fileID"></image>
+					 <view class="creation-title">{{ item.title }}</view> <!-- 新增标题 -->
 				</view>
 			</view>
 		</view>
@@ -98,7 +111,8 @@
 				],
 				creations: [
 					// 文创的项目
-				]
+				],
+				location:''
 			};
 		},
 		methods: {
@@ -141,7 +155,7 @@
 					const {
 						result
 					} = await uniCloud.database().collection('scenicSpot').limit(4).get();
-					console.log(result.data); // 打印获取到的数据
+					// console.log(result.data); // 打印获取到的数据
 					this.featureSpots = result.data; // 确保赋值的是data属性
 				} catch (error) {
 					console.error('获取景点数据失败:', error);
@@ -151,8 +165,8 @@
 				try {
 					const {
 						result
-					} = await uniCloud.database().collection('products').limit(4).get();
-					console.log(result.data); // 打印获取到的数据
+					} = await uniCloud.database().collection('products').limit(2).get();
+					// console.log(result.data); // 打印获取到的数据
 					this.creations = result.data; // 确保赋值的是data属性
 				} catch (error) {
 					console.error('获取文创数据失败:', error);
@@ -248,7 +262,6 @@
 	}
 
 	.swiper {
-		/* border: 1rpx red solid; */
 		width: 100%;
 		height: 500rpx;
 		/* 根据实际需要调整 */
@@ -262,48 +275,115 @@
 	}
 
 	.swiper-item {
-		/* 根据实际需要调整 */
-		display: flex;
-		/* 使用flex布局 */
-		justify-content: center;
-		/* 水平居中 */
-		align-items: center;
-		/* 垂直居中 */
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    overflow: hidden; /* 确保图片的阴影不会超出容器 */
 	}
-
+	.spot-item {
+	  width: 60%;
+	  border-radius: 25rpx;
+	  overflow: hidden;
+	  height: 450rpx;
+	  box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.5), -4px 8px 16px rgba(0, 0, 0, 0.5);
+	  transition: opacity 0.5s ease-in-out;
+	  opacity: 1;
+	  position: relative; /* 为绝对定位信息框做准备 */
+	}
+	
 	.spot-image {
-		/* border: 1rpx red solid; */
-		/* margin: 0 40rpx ; */
-		width: 60%;
-		/* padding:  0 40rpx; */
-		border-radius: 25rpx;
-		height: 450rpx;
-
-		box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.5), -4px 8px 16px rgba(0, 0, 0, 0.5);
-
+	  width: 100%;
+	  height: 100%;
 	}
-
+	
+	.spot-info {
+	  position: absolute;
+	  bottom: 5rpx;
+	  left: 5rpx;
+	  background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
+	  color: #fff; /* 白色文字 */
+	  padding: 10rpx 20rpx; /* 根据实际需要调整 */
+	  border-radius:  25rpx;  
+	  display: flex;
+	  flex-direction: column;
+	  align-items: flex-start;
+	}
+	
+	.spot-title {
+	  font-size: 24rpx; /* 根据实际需要调整 */
+	  margin-bottom: 5rpx; /* 根据实际需要调整 */
+	}
+	.location-item{
+		font-size: 20rpx;
+		margin-top: 10rpx;
+		display: flex;
+		align-items: center;
+	}
+	.location-icon {
+	  width: 30rpx; /* 根据实际需要调整 */
+	  height: 30rpx; /* 根据实际需要调整 */
+	}
+	
+	.spot-location {
+	  font-size: 14rpx; /* 根据实际需要调整 */
+	}
 	.delicacy-image,
 	.creation-image {
-		border-radius: 25rpx;
-		/* border: 1rpx red solid; */
-		width: 100%;
-		height: 200rpx;
-		object-fit: cover;
+	  border-radius: 25rpx;
+	  width: 100%;
+	  height: 200rpx;
+	  object-fit: cover;
 	}
-
+	
 	.delicacies-grid,
 	.creations-grid {
-		display: flex;
-		justify-content: space-around;
-		flex-wrap: wrap;
+	  display: flex;
+	  justify-content: space-around;
+	  flex-wrap: wrap;
 	}
-
+	
 	.delicacy-item,
 	.creation-item {
-		width: 30%;
-		/* 根据实际需要调整 */
-
-
+	  width: 30%;
+	  margin: 5px; /* 根据实际需要调整 */
+	  position: relative; /* 为标题定位做准备 */
+	  border-radius: 25rpx;
+	  overflow: hidden;
+	}
+	
+	.delicacy-title,
+	.creation-title {
+	  position: absolute;
+	  bottom: 0;
+	  left: 0;
+	  width: 100%;
+	  padding-bottom: 10rpx; /* 根据实际需要调整 */
+	 background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
+	  color: #ffffff; /* 文字颜色 */
+	  text-align: center; /* 文字居中 */
+	  font-size: 14rpx; /* 根据实际需要调整 */
+	}
+	
+	
+	.creation-item {
+	  width: 300rpx;
+	   box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.2), -4px 8px 16px rgba(0, 0, 0, 0.2);
+	  margin: 5px; /* 根据实际需要调整 */
+	  position: relative; /* 为标题定位做准备 */
+	  border-radius: 25rpx;
+	  overflow: hidden;
+	}
+	
+	
+	.creation-title {
+	  position: absolute;
+	  bottom: 0;
+	  left: 0;
+	  width: 100%;
+	  padding-bottom: 10rpx; /* 根据实际需要调整 */
+	 background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
+	  color: #ffffff; /* 文字颜色 */
+	  text-align: center; /* 文字居中 */
+	  font-size: 14rpx; /* 根据实际需要调整 */
 	}
 </style>
