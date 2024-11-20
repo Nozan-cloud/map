@@ -60,15 +60,15 @@
 					:value="searchValue"></uni-search-bar>
 			</view>
 		</view>
-		<!-- route框 -->
-		<view v-if="routePanelVisible" class="search-panel" style="z-index: 20;">
-			<view class="search-panel-content">
-				<u-search shape="round" @confirm="onSearchConfirm"></u-search>
+	<!-- route框 -->
+			<view v-if="routePanelVisible" class="search-panel" style="z-index: 20;">
+				<view class="search-panel-content">
+					<u-search shape="round" @confirm="onSearchConfirm"></u-search>
+				</view>
+				<view class="row" v-for="item in routeArr" @click="goDetail(item.title)" :key="item._id">
+					<route-box :item="item"></route-box>
+				</view>
 			</view>
-			<view class="row" v-for="item in routeArr" @click="goDetail(item.title)" :key="item._id">
-				<route-box :item="item"></route-box>
-			</view>
-		</view>
 		<!-- 新增：图片放大弹窗 -->
 		<uni-popup ref="imagePopup" type="center">
 			<image :src="selectedPoi.image" mode="widthFix" class="enlarged-image" @click="closeImagePopup"></image>
@@ -197,57 +197,57 @@
 			async getRouteData() {
 				try {
 					const res = await db.collection('travellog').get();
-					console.log(res);
+					// console.log(res);
 					this.routeArr = res.result.data;
-					console.log(this.routeArr);
+					// console.log(this.routeArr);
 				} catch (error) {
 					console.error('Failed to get data:', error);
 				}
 			},
 			// 画线
-			async loadPolygonData() {
-				try {
-					// 获取路线数据
-					const res = await db.collection('travellog').where({
-						title: this.routeTitle
-					}).get();
-					// console.log(res)
-					const data = res.result.data[0].stops
-					if (data && Array.isArray(data)) {
-						const points = [];
-						for (let item of data) {
-							console.log(item.title)
-							const loc = await db.collection('opendb-poi').where({
-								title: item.title
-							}).get();
-							console.log(loc)
-							const resloc = loc.data
-							// console.log(resloc)
-							points.push({
-								longitude: resloc.coordinates[0],
-								latitude: resloc.coordinates[1]
-							});
-						}
-						let polyline = [{
-							points,
-							color: "#19b411", //#6eb6ff
-							width: 6,
-							dottedLine: false,
-							arrowLine: true,
-							borderWidth: 1,
-							borderColor: "#000000",
-						}]
-						this.setPolyline(polyline)
-					} else {
-						console.log('No data or data is not in the expected format');
-					}
-				} catch (error) {
-					console.error('Error loading polygon data:', error);
-				}
-			},
+						async loadPolygonData() {
+							try {
+								// 获取路线数据
+								const res = await db.collection('travellog').where({
+									title: this.routeTitle
+								}).get();
+								console.log(res)
+								const data = res.result.data[0].stops
+								if (data && Array.isArray(data)) {
+									const points = [];
+									for (let item of data) {
+										// console.log(item.title)
+										const loc = await db.collection('opendb-poi').where({
+											title: item.title
+										}).get();
+										const resloc = loc.result.data[0].location
+										console.log(resloc)
+										points.push({
+											longitude: resloc.coordinates[1],
+											latitude: resloc.coordinates[0]
+										});
+									}
+									let polyline = [{
+										points,
+										color: "#19b411", //#6eb6ff
+										width: 6,
+										dottedLine: false,
+										arrowLine: true,
+										borderWidth: 1,
+										borderColor: "#000000",
+									}]
+									this.setPolyline(polyline)
+								} else {
+									console.log('No data or data is not in the expected format');
+								}
+							} catch (error) {
+								console.error('Error loading polygon data:', error);
+							}
+						},
 			goDetail(e) {
 				this.routePanelVisible = !this.routePanelVisible
 				this.routeTitle = e
+				this.drawLine()
 			},
 			// 设置路线
 			setPolyline(polyline) {
@@ -305,19 +305,19 @@
 							enableHighAccuracy: true
 						}
 					});
-			
+
 					// 设置地图的中心点为当前位置
 					this.latitude = res.latitude;
 					this.longitude = res.longitude;
-			
+
 					// 刷新地图以显示新的位置
 					await this.$refs.map.refresh({
 						needIncludePoints: true
 					});
-			
+
 					// 在地图上添加当前位置的标记
 					this.addCurrentLocationMarker(res.latitude, res.longitude);
-			
+
 					uni.hideLoading();
 				} catch (err) {
 					console.error('获取位置失败', err);
@@ -499,12 +499,12 @@
 				this.initData();
 				this.searchPanelVisible = false;
 			}
-		
+
 		},
 		computed: {
 			heightCom() {
 				let systemInfo = uni.getSystemInfoSync();
-				return `${systemInfo.windowHeight+50}px`;
+				return `${systemInfo.windowHeight}px`;
 			}
 		}
 
@@ -582,7 +582,7 @@
 		font-size: 60rpx;
 		position: fixed;
 		right: 30rpx;
-		top: 600rpx;
+		top: 250rpx;
 		box-shadow: 0 0 20rpx #888;
 
 		.item {
