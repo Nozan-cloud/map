@@ -10,8 +10,9 @@
 
 		<unicloud-map ref="map" :debug="false" loadtime="auto" collection="opendb-poi" :where="where" :width="750"
 			:height="heightCom" :latitude="latitude" :longitude="longitude" :scale="15" :poi-maximum="100"
-			:default-icon="defaultIcon" :custom-icons="customIcons" :polygons="polygons" :enable-scroll="true"
-			:enable-zoom="true" :show-compass="true" @poitap="poitap"></unicloud-map>
+			:default-icon="defaultIcon" :custom-icons="customIcons" :enable-scroll="true" :enable-zoom="true"
+			:show-compass="true" @poitap="poitap"></unicloud-map>
+
 
 		<!-- 新增：查看地点详情信息的弹窗 -->
 		<uni-popup ref="popup" type="center">
@@ -26,11 +27,39 @@
 			</view>
 		</uni-popup>
 
-		<!-- 新增：图片放大弹窗 -->
-		<uni-popup ref="imagePopup" type="center">
-			<image :src="selectedPoi.image" mode="widthFix" class="enlarged-image" @click="closeImagePopup"></image>
-		</uni-popup>
 
+		<!-- 悬浮按钮栏，设置 z-index 确保在地图上方显示 -->
+		<view class="buttonGroup" style="z-index: 10;">
+			<view class="item">
+				<uni-icons type="search" size="30" color="black" @click="toggleSearchPanel"></uni-icons>
+				<text>搜索</text>
+			</view>
+			<view class="item">
+				<image class="icon" ref="routePanel" src="/static/image/path.png" @click="showRoutePane()"></image>
+				<text>路线</text>
+			</view>
+			<view class="item">
+				<uni-icons type="location" size="30" color="black" @click="getUserLocation"></uni-icons>
+				<text>定位</text>
+			</view>
+		</view>
+
+		<!-- 	<view v-if="!isEditMode" class="goAdd" @click="goAdd()" style="z-index: 10;">
+			<uni-icons type="plusempty" size="30" color="white"></uni-icons>
+		</view>
+		<view v-if="isEditMode" class="closeAdd" @click="goAdd()" style="z-index: 10;">
+			<uni-icons type="close" size="30" color="black"></uni-icons>
+			<uni-icons type="checkbox" size="30" color="black" @click="checkMarker()"></uni-icons>
+		</view> -->
+		<!-- 搜索弹出框，设置 z-index 确保在地图上方显示 -->
+		<view v-if="searchPanelVisible" class="search-panel" style="z-index: 20;">
+			<view class="search-panel-content">
+				<!-- 使用uni-search-bar组件替换原来的u-search组件 -->
+				<uni-search-bar @confirm="onSearchConfirmOne" @input="onSearchInput" @clear="onSearchClear"
+					placeholder="请输入地点名称进行搜索" :show-action="true" :action-text="searching? '取消搜索' : '搜索'"
+					:value="searchValue"></uni-search-bar>
+			</view>
+		</view>
 		<!-- route框 -->
 		<view v-if="routePanelVisible" class="search-panel" style="z-index: 20;">
 			<view class="search-panel-content">
@@ -40,32 +69,15 @@
 				<route-box :item="item"></route-box>
 			</view>
 		</view>
-		<!-- 悬浮按钮栏，设置 z-index 确保在地图上方显示 -->
-		<view class="buttonGroup" style="z-index: 10;">
-			<view class="item">
-				<uni-icons type="search" size="30" color="black" @click="toggleSearchPanel"></uni-icons>
-				<text>搜索</text>
-			</view>
-			<view class="item">
-				<image class="icon" src="/static/image/path.png" @click="drawLine"></image>
-				<text>路线</text>
-			</view>
-			<view class="item">
-				<uni-icons type="location" size="30" color="black" @click="getUserLocation"></uni-icons>
-				<text>定位</text>
-			</view>
-		</view>
-
-		<!-- 搜索弹出框，设置 z-index 确保在地图上方显示 -->
-		<view v-if="searchPanelVisible" class="search-panel" style="z-index: 20;">
-			<view class="search-panel-content">
-				<!-- 使用uni-search-bar组件替换原来的u-search组件 -->
-				<uni-search-bar @confirm="onSearchConfirm" @input="onSearchInput" @clear="onSearchClear"
-					placeholder="请输入地点名称进行搜索" :show-action="true" :action-text="searching? '取消搜索' : '搜索'"
-					:value="searchValue"></uni-search-bar>
-			</view>
-		</view>
+		<!-- 新增：图片放大弹窗 -->
+		<uni-popup ref="imagePopup" type="center">
+			<image :src="selectedPoi.image" mode="widthFix" class="enlarged-image" @click="closeImagePopup"></image>
+		</uni-popup>
 	</view>
+
+
+
+
 </template>
 
 <script>
@@ -257,7 +269,7 @@
 				};
 				this.refresh();
 			},
-			async onSearchConfirm() {
+			async onSearchConfirmOne() {
 				console.log("确认搜索:", this.searchValue);
 				// 根据搜索值更新查询条件
 				// this.where = {
@@ -273,29 +285,10 @@
 				// 重新加载数据以显示搜索结果
 				await this.searchLocations();
 			},
-			async searchLocations() {
-				try {
-					const pois = await db.collection('opendb-poi').where(this.where).get();
-					if (pois && pois.data && Array.isArray(pois.data) && pois.data.length > 0) {
-						const foundPoi = pois.data[0]; // 假设只返回第一个匹配的结果
-						this.showActionSheet(foundPoi);
-					} else {
-						uni.showToast({
-							title: '找不到该地点',
-							icon: 'none'
-						});
-						//this.refresh();
-					}
-				} catch (err) {
-					console.error(err);
-					uni.showToast({
-						title: '数据加载失败，请稍后再试',
-						icon: 'none'
-					});
-				} finally {
-					this.searching = false;
-					this.searchPanelVisible = false;
-				}
+			// 搜索
+			onSearchConfirm(value) {
+				console.log("搜索:", value);
+				this.searchPanelVisible = false;
 			},
 			// 获取用户当前位置并在地图上定位显示
 			async getUserLocation() {
@@ -405,14 +398,14 @@
 								} else {
 									console.error(result.msg);
 									uni.showToast({
-										title: '当前没有更多信息',
+										title: '没有更多信息了哦',
 										icon: 'none'
 									});
 								}
 							} catch (err) {
 								console.error(err);
 								uni.showToast({
-									title: '当前没有更多信息',
+									title: '没有更多信息了哦',
 									icon: 'none'
 								});
 							}
@@ -484,10 +477,6 @@
 			toggleSearchPanel() {
 				this.searchPanelVisible = !this.searchPanelVisible;
 			},
-			// onSearchConfirm(value) {
-			// 	console.log("搜索:", value);
-			// 	this.searchPanelVisible = false;
-			// },
 			// 实时获取输入内容
 			onSearchInput(event) {
 				console.log('onSearchInput event:', event);
@@ -508,6 +497,7 @@
 				this.initData();
 				this.searchPanelVisible = false;
 			}
+		
 		},
 		computed: {
 			heightCom() {
