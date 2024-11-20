@@ -35,7 +35,7 @@
 				<text>搜索</text>
 			</view>
 			<view class="item">
-				<image class="icon" ref="routePanel" src="/static/image/path.png" @click="showRoutePane()"></image>
+				<image class="icon" ref="routePanel" src="https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/path.png" @click="showRoutePane()"></image>
 				<text>路线</text>
 			</view>
 			<view class="item">
@@ -115,23 +115,23 @@
 				where: {
 					category: category //定义了查询条件，用于在云数据库中检索数据
 				}, // 查询条件，不支持字符串JQL形式，必须是对象形式
-				defaultIcon: "/static/image/marker.png", // 默认图标
+				defaultIcon: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/marker.png", // 默认图标
 				// 自定义图标
 				customIcons: [{
 						type: "景点",
-						icon: "/static/image/marker.png"
+						icon: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/marker.png"
 					},
 					{
 						type: "卫生间",
-						icon: "/static/image/tolet.png"
+						icon: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/tolet.png"
 					},
 					{
 						type: "停车点",
-						icon: "/static/image/park.png"
+						icon: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/park.png"
 					},
 					{
 						type: "你的位置",
-						icon: "/static/image/marker.png"
+						icon: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/marker.png"
 					},
 				],
 				polyline: { // 初始化polyline数组
@@ -346,7 +346,7 @@
 				let iconPath;
 				switch (type) {
 					case '景点':
-						iconPath = "/static/image/marker.png";
+						iconPath = "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/marker.png";
 						break;
 					case '卫生间':
 						iconPath = "/static/image/tolet.png";
@@ -355,10 +355,10 @@
 						iconPath = "/static/image/park.png";
 						break;
 					case '定位标记':
-						iconPath = "/static/image/marker.png";
+						iconPath = "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/marker.png";
 						break;
 					default:
-						iconPath = "/static/image/marker.png";
+						iconPath = "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/marker.png";
 				}
 				return iconPath;
 			},
