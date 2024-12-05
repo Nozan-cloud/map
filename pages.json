@@ -43,17 +43,17 @@
 		}, {
 			"path": "uni_modules/uni-id-pages/pages/userinfo/cropImage/cropImage",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "紫荆旅图"
 			}
 		}, {
 			"path": "uni_modules/uni-id-pages/pages/login/login-withoutpwd",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "紫荆旅图"
 			}
 		}, {
 			"path": "uni_modules/uni-id-pages/pages/login/login-withpwd",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "紫荆旅图"
 			}
 		}, {
 			"path": "uni_modules/uni-id-pages/pages/login/login-smscode",
@@ -181,7 +181,7 @@
 		{
 			"path": "pages/test/test",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "紫荆旅图",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -211,32 +211,24 @@
 			}
 		},
 		{
-			"path": "pages/detailPages/detailPages",
+			"path": "pages/detail-pages/detail-pages",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "紫荆旅图"
 			}
 		},
 		{
 			"path": "pages/uni-cloud-map/uni-cloud-map",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "紫荆旅图"
 			}
 		},
 		{
 			"path": "pages/allArt/index",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "紫荆旅图"
 			}
 		},
 		{
-			"path": "pages/allArt/add",
-			"style": {
-				"navigationBarTitleText": ""
-			}
-		}
-
-
-		, {
 			"path": "pages/tujian2/add",
 			"style": {
 				"navigationBarTitleText": "新增"
@@ -261,7 +253,7 @@
 			"path" : "pages/wait/wait",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "紫荆旅图"
 			}
 		}
 	],

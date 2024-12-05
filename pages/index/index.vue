@@ -131,7 +131,7 @@
 			},
 			redirectTo(type, id) {
 				uni.navigateTo({
-					url: `/pages/detailPages/detailPages?type=${type}&id=${id}`
+					url: `/pages/detail-pages/detail-pages?type=${type}&id=${id}`
 				})
 			},
 			// 跳转到全部

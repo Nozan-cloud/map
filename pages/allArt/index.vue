@@ -1,12 +1,25 @@
 <template>
   <view class="content">
-    <view class="row" v-for="item in listArr" @click="goDetail(db,item._id)" :key="item._id">
-      <newsbox :item="item"></newsbox>
+    <view class="row" v-for="item in listArr"  :key="item._id">
+     <view class="newsbox" @click="Todetail(item._id)">
+     	<!-- 左图右文 -->
+     	<view class="pic">
+     		<!-- 可设置样式 -->
+     		<image v-if="item.pictures&&item.pictures[0]" :src="item.pictures[0].fileID" mode="aspectFill"></image>
+     		<!-- 默认图片 -->
+     		<image v-else src="/static/logo.png" mode="aspectFill"></image>
+     	</view>
+     	<view class="text">
+     		<view class="title">{{item.title}}</view>
+     		<view class="info">
+     			<text>{{item.description}}</text>
+     			
+     		</view>
+     	</view>
+     </view>
     </view>
   
-   <!-- <view class="goAdd" @click="goAdd">
-      <uni-icons type="plusempty" size="30" color="white"></uni-icons>
-    </view> -->
+
   </view>
 </template>
 
@@ -33,9 +46,9 @@ export default {
   },
   methods: {
   // 跳转到详情页
-  goDetail(type, id) {
+  Todetail(id) {
     uni.navigateTo({
-      url: `/pages/detailPages/detailPages?type=${type}&id=${id}`
+      url: `/pages/detail-pages/detail-pages?type=${this.db}&id=${id}`
     });
   },
     //获取数据库的列表
@@ -54,12 +67,6 @@ export default {
         uni.stopPullDownRefresh();
       }).catch(err => {
         console.error('Failed to fetch data:', err);
-      });
-    },
-    //点击跳转到新增页面
-    goAdd() {
-      uni.navigateTo({
-        url: "/pages/allArt/add"
       });
     }
   }
@@ -93,4 +100,52 @@ export default {
   bottom: 100rpx;
   box-shadow: 0 0 20rpx rgb(19, 116, 47); //偏移 x y 模糊值
 }
+.newsbox {
+		height: 450rpx;
+		display: flex;
+		flex-direction:column;
+		
+
+		.pic {
+			width: 100%;
+			height: 400rpx;
+			
+			
+
+			image {
+				width: 100%;
+				height: 100%;
+				
+			}
+		}
+
+		.text {
+			//border: 1px solid #333;
+			flex: 1; //占满一格子
+			padding-left: 20rpx;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+
+			.title {
+				font-size: 38rpx;
+				color: #333;
+				//两行多则显示省略号
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+			}
+
+			.info {
+				font-size: 26rpx;
+				color: #999;
+
+				text {
+					padding-right: 30rpx;
+				}
+			}
+		}
+	}
 </style>

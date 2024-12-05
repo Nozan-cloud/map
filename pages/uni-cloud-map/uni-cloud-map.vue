@@ -1,12 +1,12 @@
 <template>
 	<view class="page">
 		<!-- 顶部导航栏 -->
-		<scroll-view scroll-x="true" class="navscroll">
+	<!-- 	<scroll-view scroll-x="true" class="navscroll">
 			<view class="item" :class="index == navindex? 'active' : ''" v-for="(item, index) in navarr" :key="index"
 				@click="navclick(index)">
 				{{ item }}
 			</view>
-		</scroll-view>
+		</scroll-view> -->
 
 		<unicloud-map ref="map" :debug="false" loadtime="auto" collection="opendb-poi" :where="where" :width="750"
 			:height="heightCom" :latitude="latitude" :longitude="longitude" :scale="15" :poi-maximum="100"
@@ -91,7 +91,7 @@
 	});
 	const db = uniCloud.database();
 	const _ = db.command;
-	const category = "1";
+	// const category = "1";
 
 	export default {
 		components: {
@@ -112,9 +112,6 @@
 				routeArr: [],
 				navarr: ["景点", "停车点", "卫生间"],
 				selectedPoi: {}, // 新增：用于存储选中的POI信息
-				where: {
-					category: category //定义了查询条件，用于在云数据库中检索数据
-				}, // 查询条件，不支持字符串JQL形式，必须是对象形式
 				defaultIcon: "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/marker.png", // 默认图标
 				// 自定义图标
 				customIcons: [{
@@ -140,7 +137,7 @@
 			}
 		},
 		onLoad() {
-
+		
 		},
 		methods: {
 			// 初始化测试数据
@@ -151,7 +148,7 @@
 				});
 				try {
 					// 从数据库读取数据
-					const pois = await db.collection('opendb-poi').where(this.where).get();
+					const pois = await db.collection('opendb-poi').get();
 					if (pois && pois.data && Array.isArray(pois.data)) {
 						// 清空地图上之前的标记点等内容，以便正确显示搜索结果
 						this.$refs.map.clearAllPoints();
@@ -178,11 +175,11 @@
 							});
 						}
 					} else {
-						console.error('从数据库获取数据失败或数据格式不正确', pois);
-						uni.showToast({
-							title: '数据加载失败，请稍后再试',
-							icon: 'none'
-						});
+						// console.error('从数据库获取数据失败或数据格式不正确', pois);
+						// uni.showToast({
+						// 	title: '数据加载失败，请稍后再试',
+						// 	icon: 'none'
+						// });
 					}
 				} catch (err) {
 					console.error(err);
@@ -223,8 +220,8 @@
 										const resloc = loc.result.data[0].location
 										console.log(resloc)
 										points.push({
-											longitude: resloc.coordinates[1],
-											latitude: resloc.coordinates[0]
+											longitude: resloc.coordinates[0],
+											latitude: resloc.coordinates[1]
 										});
 									}
 									let polyline = [{
@@ -266,8 +263,8 @@
 				this.navindex = index;
 				console.log("导航项点击:", this.navarr[index]);
 				this.where = {
-					category: category,
-					type: this.navarr[index]
+					// category:this.navindex,
+					type: this.navarr[this.navindex]
 				};
 				this.refresh();
 			},
@@ -349,10 +346,10 @@
 						iconPath = "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/marker.png";
 						break;
 					case '卫生间':
-						iconPath = "/static/image/tolet.png";
+						iconPath = "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/tolet.png";
 						break;
 					case '停车点':
-						iconPath = "/static/image/park.png";
+						iconPath = "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/park.png";
 						break;
 					case '定位标记':
 						iconPath = "https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/marker.png";
@@ -492,9 +489,9 @@
 			onSearchClear() {
 				this.searchValue = '';
 				// 重置查询条件为初始状态
-				this.where = {
-					category: category
-				};
+				// this.where = {
+				// 	category: category
+				// };
 				// 重新加载数据以显示初始状态下的所有地点
 				this.initData();
 				this.searchPanelVisible = false;
@@ -506,6 +503,9 @@
 				let systemInfo = uni.getSystemInfoSync();
 				return `${systemInfo.windowHeight}px`;
 			}
+		},
+		mounted() {
+		  this.initData();
 		}
 
 	}
