@@ -41,7 +41,9 @@
                 ]
             },
             /* ios打包配置 */
-            "ios" : {},
+            "ios" : {
+                "dSYMs" : false
+            },
             /* SDK配置 */
             "sdkConfigs" : {}
         }
@@ -78,12 +80,31 @@
     },
     "vueVersion" : "2",
     "h5" : {
+		 "devServer" : {
+		        "disableHostCheck" : true,
+		        "proxy" : {
+		            "/api" : {
+		                "target" : "https://static-mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.next.bspapp.com/",
+		                "changeOrigin" : true,
+		                "secure" : false,
+		                "ws": false,
+		                "pathRewrite" : {
+		                    "^/api" : ""
+		                }
+		            }
+		        }
+		    },
         "sdkConfigs" : {
             "maps" : {
                 "qqmap" : {
                     "key" : "4H5BZ-O2T3V-RJTPV-5UL7G-WZ6B7-3OFYG"
                 }
             }
+        },
+        "title" : "紫荆旅图",
+        "router" : {
+            "mode" : "hash",
+            "base" : "./"
         }
     }
 }
