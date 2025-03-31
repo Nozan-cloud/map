@@ -1,25 +1,11 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/uni-cloud-map/uni-cloud-map",
-			"style": {
-				"navigationBarTitleText": ""
-			}
-		},
-		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "紫荆旅图"
 			}
 		},
-		{
-			"path": "pages/map/map",
-			"style": {
-				"navigationBarTitleText": "路线打卡",
-				"enablePullDownRefresh": false
-			}
-		},
-
 		{
 			"path": "pages/quanzi/quanzi",
 			"style": {
@@ -57,17 +43,17 @@
 		}, {
 			"path": "uni_modules/uni-id-pages/pages/userinfo/cropImage/cropImage",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "紫荆旅图"
 			}
 		}, {
 			"path": "uni_modules/uni-id-pages/pages/login/login-withoutpwd",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "紫荆旅图"
 			}
 		}, {
 			"path": "uni_modules/uni-id-pages/pages/login/login-withpwd",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "紫荆旅图"
 			}
 		}, {
 			"path": "uni_modules/uni-id-pages/pages/login/login-smscode",
@@ -195,7 +181,7 @@
 		{
 			"path": "pages/test/test",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "紫荆旅图",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -205,12 +191,90 @@
 				"navigationBarTitleText": "home",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			"path": "pages/travellog/travellog",
+			"style": {
+				"navigationBarTitleText": "游览攻略"
+			}
+		},
+		{
+			"path": "pages/travellogdetail/travellogdetail",
+			"style": {
+				"navigationBarTitleText": "游览攻略"
+			}
+		},
+		{
+			"path": "pages/addtravellog/addtravellog",
+			"style": {
+				"navigationBarTitleText": "新增攻略"
+			}
+		},
+		{
+			"path": "pages/detail-pages/detail-pages",
+			"style": {
+				"navigationBarTitleText": "紫荆旅图"
+			}
+		},
+		{
+			"path": "pages/uni-cloud-map/uni-cloud-map",
+			"style": {
+				"navigationBarTitleText": "紫荆旅图"
+			}
+		},
+		{
+			"path": "pages/allArt/index",
+			"style": {
+				"navigationBarTitleText": "紫荆旅图"
+			}
+		},
+		{
+			"path": "pages/tujian2/add",
+			"style": {
+				"navigationBarTitleText": "新增"
+			}
+		}, {
+			"path": "pages/tujian2/edit",
+			"style": {
+				"navigationBarTitleText": "编辑"
+			}
+		}, {
+			"path": "pages/tujian2/list",
+			"style": {
+				"navigationBarTitleText": "动植图鉴"
+			}
+		}, {
+			"path": "pages/tujian2/detail",
+			"style": {
+				"navigationBarTitleText": "动植图鉴"
+			}
+		},
+		{
+			"path" : "pages/wait/wait",
+			"style" : 
+			{
+				"navigationBarTitleText" : "紫荆旅图"
+			}
+		},
+		{
+			"path" : "pages/login/login",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/userinfo/userinfo",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
 		}
-
 	],
+
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "哒宰的圈子",
+		"navigationBarTitleText": "紫荆旅图",
 		"navigationBarBackgroundColor": "#13742F",
 		"backgroundColor": "#F8F8F8"
 	},
@@ -219,9 +283,15 @@
 		"selectedColor": "#13742F",
 		"list": [{
 				"pagePath": "pages/index/index",
-				"iconPath": "static/image/圈子.png",
-				"selectedIconPath": "static/image/圈子 (1).png",
+				"iconPath": "static/image/首页.png",
+				"selectedIconPath": "static/image/首页 (1).png",
 				"text": "首页"
+			},
+			{
+				"pagePath": "pages/uni-cloud-map/uni-cloud-map",
+				"iconPath": "static/image/map.png",
+				"selectedIconPath": "static/image/map(1).png",
+				"text": "地图"
 			},
 			{
 				"pagePath": "pages/quanzi/quanzi",

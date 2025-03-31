@@ -34,7 +34,7 @@
 					<view class="users">
 						<template v-for="item in likeUserArr">
 							
-							<image :src="item.user_id[0].avatar_file?'https://env-00jxge6l72td.normal.cloudstatic.cn/'+item.user_id[0].avatar_file.name:''" mode="aspectFill"></image>
+							<image :src="item.user_id[0].avatar_file?item.user_id[0].avatar_file.name:''" mode="aspectFill"></image>
 							
 						</template>
 					</view>
@@ -92,11 +92,11 @@
 			};
 		},
 		onLoad(e) { //从onLoad拿到id参数
-			//console.log(e)
-			if(!e.id){
-				this.errFun()
-				return;
-			}
+			// //console.log(e)
+			// if(!e.id){
+			// 	this.errFun()
+			// 	return;
+			// }
 			this.artid = e.id
 			this.getData()
 			this.readUpdate()
