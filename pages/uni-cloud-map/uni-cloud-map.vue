@@ -1,86 +1,442 @@
 <template>
-	<view class="page">
-		<!-- 顶部导航栏 -->
-	<!-- 	<scroll-view scroll-x="true" class="navscroll">
-			<view class="item" :class="index == navindex? 'active' : ''" v-for="(item, index) in navarr" :key="index"
-				@click="navclick(index)">
-				{{ item }}
-			</view>
-		</scroll-view> -->
+  <view class="page">
+    <!-- 地图容器 -->
+    <map 
+      id="map" 
+      :latitude="latitude" 
+      :longitude="longitude" 
+      :scale="scale" 
+      :markers="markers"
+      :polyline="polyline"
+      show-location
+      show-compass
+      enable-scroll
+      enable-zoom
+      @markertap="onMarkerTap"
+      style="width: 100%; height: 100%;"
+    ></map>
 
-		<unicloud-map ref="map" :debug="false" loadtime="auto" collection="opendb-poi" :where="where" :width="750"
-			:height="heightCom" :latitude="latitude" :longitude="longitude" :scale="15" :poi-maximum="100"
-			:default-icon="defaultIcon" :custom-icons="customIcons" :enable-scroll="true" :enable-zoom="true"
-			:show-compass="true" @poitap="poitap"></unicloud-map>
+    <!-- 地点详情弹窗 -->
+    <uni-popup ref="popup" type="center">
+      <view class="popup-content">
+        <image 
+          v-if="selectedPoi.image" 
+          :src="selectedPoi.image" 
+          mode="aspectFill" 
+          class="popup-image"
+          @click="openImagePopup"
+        ></image>
+        <view class="popup-info">
+          <text class="popup-title">{{ selectedPoi.title }}</text>
+          <text class="popup-address">地址：{{ selectedPoi.address || '暂无地址信息' }}</text>
+          <text class="popup-other-info">{{ selectedPoi.otherInfo || '暂无其他信息' }}</text>
+        </view>
+        <button class="popup-button" @click="closePopup">关闭</button>
+      </view>
+    </uni-popup>
 
+    <!-- 图片放大弹窗 -->
+    <uni-popup ref="imagePopup" type="center">
+      <image 
+        v-if="selectedPoi.image" 
+        :src="selectedPoi.image" 
+        mode="widthFix" 
+        class="enlarged-image"
+        @click="closeImagePopup"
+      ></image>
+    </uni-popup>
 
-		<!-- 新增：查看地点详情信息的弹窗 -->
-		<uni-popup ref="popup" type="center">
-			<view class="popup-content">
-				<image :src="selectedPoi.image" mode="aspectFill" class="popup-image" @click="openImagePopup"></image>
-				<view class="popup-info">
-					<text class="popup-title">{{ selectedPoi.title }}</text>
-					<text class="popup-address">详细地址：{{ selectedPoi.address }}</text>
-					<text class="popup-other-info">其他信息：{{ selectedPoi.otherInfo || '暂无其他信息' }}</text>
-				</view>
-				<button @click="closePopup">关闭</button>
-			</view>
-		</uni-popup>
+    <!-- 底部操作栏 -->
+    <view class="bottom-toolbar">
+      <view class="toolbar-item" @click="toggleSearchPanel">
+        <uni-icons type="search" size="24" color="#333"></uni-icons>
+        <text>搜索</text>
+      </view>
+      <view class="toolbar-item" @click="showRoutePanel">
+        <uni-icons type="map" size="24" color="#333"></uni-icons>
+        <text>路线</text>
+      </view>
+      <view class="toolbar-item" @click="getUserLocation">
+        <uni-icons type="location" size="24" color="#333"></uni-icons>
+        <text>定位</text>
+      </view>
+    </view>
 
+    <!-- 搜索面板 -->
+    <view v-if="searchPanelVisible" class="search-panel">
+      <view class="search-header">
+        <uni-search-bar 
+          placeholder="请输入地点名称" 
+          v-model="searchValue"
+          @confirm="onSearchConfirm"
+          @cancel="onSearchCancel"
+          @clear="onSearchClear"
+        ></uni-search-bar>
+      </view>
+      <scroll-view class="search-results" scroll-y>
+        <view 
+          v-for="(item, index) in searchResults" 
+          :key="index" 
+          class="search-item"
+          @click="goToLocation(item)"
+        >
+          <text class="search-item-title">{{ item.title }}</text>
+          <text class="search-item-address">{{ item.address }}</text>
+        </view>
+      </scroll-view>
+    </view>
 
-		<!-- 悬浮按钮栏，设置 z-index 确保在地图上方显示 -->
-		<view class="buttonGroup" style="z-index: 10;">
-			<view class="item">
-				<uni-icons type="search" size="30" color="black" @click="toggleSearchPanel"></uni-icons>
-				<text>搜索</text>
-			</view>
-			<view class="item">
-				<image class="icon" ref="routePanel" src="https://mp-b98f95b8-7904-4a54-8bf2-8f0098b62dda.cdn.bspapp.com/path.png" @click="showRoutePane()"></image>
-				<text>路线</text>
-			</view>
-			<view class="item">
-				<uni-icons type="location" size="30" color="black" @click="getUserLocation"></uni-icons>
-				<text>定位</text>
-			</view>
-		</view>
-
-		<!-- 	<view v-if="!isEditMode" class="goAdd" @click="goAdd()" style="z-index: 10;">
-			<uni-icons type="plusempty" size="30" color="white"></uni-icons>
-		</view>
-		<view v-if="isEditMode" class="closeAdd" @click="goAdd()" style="z-index: 10;">
-			<uni-icons type="close" size="30" color="black"></uni-icons>
-			<uni-icons type="checkbox" size="30" color="black" @click="checkMarker()"></uni-icons>
-		</view> -->
-		<!-- 搜索弹出框，设置 z-index 确保在地图上方显示 -->
-		<view v-if="searchPanelVisible" class="search-panel" style="z-index: 20;">
-			<view class="search-panel-content">
-				<!-- 使用uni-search-bar组件替换原来的u-search组件 -->
-				<uni-search-bar @confirm="onSearchConfirmOne" @input="onSearchInput" @clear="onSearchClear"
-					placeholder="请输入地点名称进行搜索" :show-action="true" :action-text="searching? '取消搜索' : '搜索'"
-					:value="searchValue"></uni-search-bar>
-			</view>
-		</view>
-	<!-- route框 -->
-			<view v-if="routePanelVisible" class="search-panel" style="z-index: 20;">
-				<view class="search-panel-content">
-					<u-search shape="round" @confirm="onSearchConfirm"></u-search>
-				</view>
-				<view class="row" v-for="item in routeArr" @click="goDetail(item.title)" :key="item._id">
-					<route-box :item="item"></route-box>
-				</view>
-			</view>
-		<!-- 新增：图片放大弹窗 -->
-		<uni-popup ref="imagePopup" type="center">
-			<image :src="selectedPoi.image" mode="widthFix" class="enlarged-image" @click="closeImagePopup"></image>
-		</uni-popup>
-	</view>
-
-
-
-
+    <!-- 路线面板 -->
+    <view v-if="routePanelVisible" class="route-panel">
+      <view class="route-header">
+        <text class="route-title">推荐路线</text>
+        <uni-icons type="close" size="24" @click="routePanelVisible = false"></uni-icons>
+      </view>
+      <scroll-view class="route-list" scroll-y>
+        <view 
+          v-for="(route, index) in routeList" 
+          :key="index" 
+          class="route-item"
+          @click="showRoute(route)"
+        >
+          <text class="route-item-title">{{ route.name }}</text>
+          <text class="route-item-desc">{{ route.description }}</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
 </template>
-
 <script>
+// import uniIcons from '@/components/uni-icons/uni-icons.vue'
+// import uniPopup from '@/components/uni-popup/uni-popup.vue'
+// import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue'
+
+// 后端API基础地址 - 根据实际部署地址修改
+const API_BASE_URL = 'http://127.0.0.1:8081/';
+
+export default {
+  // components: {
+  //   uniIcons,
+  //   uniPopup,
+  //   uniSearchBar
+  // },
+  data() {
+    return {
+      // 地图相关
+      latitude: 39.90469, // 默认北京中心坐标
+      longitude: 116.40717,
+      scale: 15,
+      markers: [],
+      polyline: [],
+      
+      // 搜索相关
+      searchPanelVisible: false,
+      searchValue: '',
+      searchResults: [],
+      
+      // 路线相关
+      routePanelVisible: false,
+      routeList: [],
+      selectedRoute: null,
+      
+      // 地点详情
+      selectedPoi: {},
+      
+      // 图标配置
+      icons: {
+        default: '/static/marker.png',
+        scenic: '/static/scenic.png',
+        toilet: '/static/toilet.png',
+        parking: '/static/parking.png',
+        user: '/static/user-location.png'
+      }
+    }
+  },
+  onLoad() {
+    this.initMapData();
+    this.loadRoutes();
+  },
+  methods: {
+    // 初始化地图数据
+    async initMapData() {
+      try {
+        const res = await uni.request({
+          url: `${API_BASE_URL}/poi`,
+          method: 'GET'
+        });
+        
+        if (res[1].statusCode === 200) {
+          this.markers = res[1].data.map(poi => ({
+            id: poi.id,
+            latitude: poi.location.coordinates[1],
+            longitude: poi.location.coordinates[0],
+            title: poi.title,
+            iconPath: this.getIconPath(poi.type),
+            width: 30,
+            height: 30,
+            callout: {
+              content: poi.title,
+              color: '#333',
+              fontSize: 14,
+              borderRadius: 5,
+              bgColor: '#fff',
+              padding: 5,
+              display: 'ALWAYS'
+            },
+            customCallout: {
+              anchorY: 0,
+              anchorX: 0,
+              display: 'ALWAYS'
+            }
+          }));
+        }
+      } catch (err) {
+        console.error('初始化地图数据失败:', err);
+        uni.showToast({
+          title: '数据加载失败',
+          icon: 'none'
+        });
+      }
+    },
+    
+    // 获取用户当前位置
+    async getUserLocation() {
+      uni.showLoading({
+        title: '定位中...',
+        mask: true
+      });
+      
+      try {
+        const res = await uni.getLocation({
+          type: 'gcj02',
+          geocode: true
+        });
+        
+        this.latitude = res.latitude;
+        this.longitude = res.longitude;
+        this.scale = 16;
+        
+        // 添加用户位置标记
+        this.markers.push({
+          id: 'user-location',
+          latitude: res.latitude,
+          longitude: res.longitude,
+          iconPath: this.icons.user,
+          width: 30,
+          height: 30,
+          title: '我的位置'
+        });
+        
+        uni.hideLoading();
+      } catch (err) {
+        console.error('获取位置失败:', err);
+        uni.hideLoading();
+        uni.showToast({
+          title: '定位失败，请检查权限设置',
+          icon: 'none'
+        });
+      }
+    },
+    
+    // 根据类型获取图标路径
+    getIconPath(type) {
+      switch(type) {
+        case '景点':
+          return this.icons.scenic;
+        case '卫生间':
+          return this.icons.toilet;
+        case '停车场':
+          return this.icons.parking;
+        default:
+          return this.icons.default;
+      }
+    },
+    
+    // 标记点点击事件
+    onMarkerTap(e) {
+      const markerId = e.markerId;
+      const marker = this.markers.find(m => m.id === markerId);
+      
+      if (marker) {
+        this.showPoiDetail(marker);
+      }
+    },
+    
+    // 显示地点详情
+    async showPoiDetail(marker) {
+      try {
+        const res = await uni.request({
+          url: `${API_BASE_URL}/poi/${marker.id}`,
+          method: 'GET'
+        });
+        
+        if (res[1].statusCode === 200) {
+          this.selectedPoi = res[1].data;
+          this.$refs.popup.open();
+        }
+      } catch (err) {
+        console.error('获取地点详情失败:', err);
+        uni.showToast({
+          title: '获取信息失败',
+          icon: 'none'
+        });
+      }
+    },
+    
+    // 关闭详情弹窗
+    closePopup() {
+      this.$refs.popup.close();
+    },
+    
+    // 打开图片放大弹窗
+    openImagePopup() {
+      this.$refs.imagePopup.open();
+    },
+    
+    // 关闭图片放大弹窗
+    closeImagePopup() {
+      this.$refs.imagePopup.close();
+    },
+    
+    // 切换搜索面板
+    toggleSearchPanel() {
+      this.searchPanelVisible = !this.searchPanelVisible;
+      if (this.searchPanelVisible) {
+        this.routePanelVisible = false;
+      }
+    },
+    
+    // 搜索确认
+    async onSearchConfirm() {
+      if (!this.searchValue.trim()) return;
+      
+      uni.showLoading({
+        title: '搜索中...',
+        mask: true
+      });
+      
+      try {
+        const res = await uni.request({
+          url: `${API_BASE_URL}/poi/search`,
+          method: 'GET',
+          data: {
+            keyword: this.searchValue
+          }
+        });
+        
+        if (res[1].statusCode === 200) {
+          this.searchResults = res[1].data;
+        }
+      } catch (err) {
+        console.error('搜索失败:', err);
+        uni.showToast({
+          title: '搜索失败',
+          icon: 'none'
+        });
+      } finally {
+        uni.hideLoading();
+      }
+    },
+    
+    // 搜索取消
+    onSearchCancel() {
+      this.searchPanelVisible = false;
+      this.searchValue = '';
+      this.searchResults = [];
+    },
+    
+    // 搜索清除
+    onSearchClear() {
+      this.searchResults = [];
+    },
+    
+    // 跳转到指定位置
+    goToLocation(item) {
+      this.latitude = item.location.coordinates[1];
+      this.longitude = item.location.coordinates[0];
+      this.scale = 16;
+      this.searchPanelVisible = false;
+    },
+    
+    // 显示路线面板
+    showRoutePanel() {
+      this.routePanelVisible = !this.routePanelVisible;
+      if (this.routePanelVisible) {
+        this.searchPanelVisible = false;
+      }
+    },
+    
+    // 加载路线数据
+    async loadRoutes() {
+      try {
+        const res = await uni.request({
+          url: `${API_BASE_URL}/routes`,
+          method: 'GET'
+        });
+        
+        if (res[1].statusCode === 200) {
+          this.routeList = res[1].data;
+        }
+      } catch (err) {
+        console.error('加载路线失败:', err);
+      }
+    },
+    
+    // 显示路线
+    async showRoute(route) {
+      try {
+        const res = await uni.request({
+          url: `${API_BASE_URL}/routes/${route.id}`,
+          method: 'GET'
+        });
+        
+        if (res[1].statusCode === 200) {
+          const routeData = res[1].data;
+          
+          // 更新地图中心点
+          if (routeData.points && routeData.points.length > 0) {
+            const firstPoint = routeData.points[0];
+            this.latitude = firstPoint.latitude;
+            this.longitude = firstPoint.longitude;
+            this.scale = 14;
+          }
+          
+          // 绘制路线
+          this.polyline = [{
+            points: routeData.points.map(p => ({
+              latitude: p.latitude,
+              longitude: p.longitude
+            })),
+            color: '#1890FF',
+            width: 6,
+            dottedLine: false,
+            arrowLine: true
+          }];
+          
+          // 显示路线上的点
+          this.markers = routeData.points.map((p, index) => ({
+            id: `route-point-${index}`,
+            latitude: p.latitude,
+            longitude: p.longitude,
+            title: p.title || `途经点 ${index + 1}`,
+            iconPath: this.getIconPath(p.type || '景点'),
+            width: 24,
+            height: 24
+          }));
+          
+          this.routePanelVisible = false;
+        }
+      } catch (err) {
+        console.error('显示路线失败:', err);
+        uni.showToast({
+          title: '加载路线失败',
+          icon: 'none'
+        });
+      }
+    }
+  }
+}
+</script>
 	import {
 		uniSearchBar
 	} from '@dcloudio/uni-ui';
@@ -511,7 +867,189 @@
 	}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.page {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 地图容器 */
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+/* 底部工具栏 */
+.bottom-toolbar {
+  position: fixed;
+  bottom: 120rpx;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 50rpx;
+  padding: 20rpx 0;
+  margin: 0 30rpx;
+  box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  
+  .toolbar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    text {
+      font-size: 24rpx;
+      color: #333;
+      margin-top: 10rpx;
+    }
+  }
+}
+
+/* 搜索面板 */
+.search-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60vh;
+  background-color: #fff;
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  box-shadow: 0 -5rpx 20rpx rgba(0, 0, 0, 0.1);
+  z-index: 20;
+  
+  .search-header {
+    padding: 20rpx;
+    border-bottom: 1rpx solid #eee;
+  }
+  
+  .search-results {
+    height: calc(60vh - 100rpx);
+    padding: 0 20rpx;
+    
+    .search-item {
+      padding: 20rpx 0;
+      border-bottom: 1rpx solid #f5f5f5;
+      
+      .search-item-title {
+        font-size: 32rpx;
+        color: #333;
+        display: block;
+      }
+      
+      .search-item-address {
+        font-size: 26rpx;
+        color: #999;
+        display: block;
+        margin-top: 10rpx;
+      }
+    }
+  }
+}
+
+/* 路线面板 */
+.route-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50vh;
+  background-color: #fff;
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  box-shadow: 0 -5rpx 20rpx rgba(0, 0, 0, 0.1);
+  z-index: 20;
+  
+  .route-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20rpx;
+    border-bottom: 1rpx solid #eee;
+    
+    .route-title {
+      font-size: 32rpx;
+      font-weight: bold;
+      color: #333;
+    }
+  }
+  
+  .route-list {
+    height: calc(50vh - 100rpx);
+    padding: 0 20rpx;
+    
+    .route-item {
+      padding: 25rpx 0;
+      border-bottom: 1rpx solid #f5f5f5;
+      
+      .route-item-title {
+        font-size: 30rpx;
+        color: #333;
+        display: block;
+      }
+      
+      .route-item-desc {
+        font-size: 26rpx;
+        color: #999;
+        display: block;
+        margin-top: 10rpx;
+      }
+    }
+  }
+}
+
+/* 详情弹窗 */
+.popup-content {
+  width: 80vw;
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  
+  .popup-image {
+    width: 100%;
+    height: 200rpx;
+    display: block;
+  }
+  
+  .popup-info {
+    padding: 30rpx;
+    
+    .popup-title {
+      font-size: 36rpx;
+      font-weight: bold;
+      color: #333;
+      display: block;
+      margin-bottom: 20rpx;
+    }
+    
+    .popup-address, .popup-other-info {
+      font-size: 28rpx;
+      color: #666;
+      display: block;
+      margin-bottom: 15rpx;
+      line-height: 1.5;
+    }
+  }
+  
+  .popup-button {
+    margin: 20rpx;
+    background-color: #1890FF;
+    color: #fff;
+  }
+}
+
+/* 图片放大弹窗 */
+.enlarged-image {
+  width: 90vw;
+  max-height: 80vh;
+}
+</style>
 	@import "@/theme.scss";
 
 	.navscroll {
